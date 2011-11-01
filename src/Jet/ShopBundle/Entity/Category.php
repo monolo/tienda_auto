@@ -37,6 +37,11 @@ class Category
      * @ORM\OneToMany(targetEntity="Subcategory", mappedBy="subcategory")
      */
     private $subcategories;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Slider", mappedBy="slider")
+     */
+    private $slider;
 
 
     /**
@@ -116,5 +121,25 @@ class Category
     public function __toString()
     {
     	return $this->name; 
+    }
+
+    /**
+     * Add slider
+     *
+     * @param Jet\ShopBundle\Entity\Slider $slider
+     */
+    public function addSlider(\Jet\ShopBundle\Entity\Slider $slider)
+    {
+        $this->slider[] = $slider;
+    }
+
+    /**
+     * Get slider
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getSlider()
+    {
+        return $this->slider;
     }
 }

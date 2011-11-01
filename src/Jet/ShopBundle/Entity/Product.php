@@ -71,6 +71,11 @@ class Product
     private $subcategory;
     
     /**
+     * @ORM\OneToMany(targetEntity="Slider", mappedBy="product")
+     */
+    private $product;
+    
+    /**
      * @Assert\File(maxSize="6000000")
      */
     public $file;
@@ -314,5 +319,33 @@ class Product
     public function getPath()
     {
         return $this->path;
+    }
+    public function __construct()
+    {
+        $this->product = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Add product
+     *
+     * @param Jet\ShopBundle\Entity\Slider $product
+     */
+    public function addSlider(\Jet\ShopBundle\Entity\Slider $product)
+    {
+        $this->product[] = $product;
+    }
+
+    /**
+     * Get product
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getProduct()
+    {
+        return $this->product;
+    }
+    public function __toString()
+    {
+    	return $this->name; 
     }
 }

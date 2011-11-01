@@ -1,0 +1,39 @@
+<h1>Slider list</h1>
+
+<table class="records_list">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th></th>
+            <th>category</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        <tr>
+            <td><a href="{{ path('auto_slider_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+            <td><img src="{{asset(entity.getWebPath)}}"/></td>
+            <td>{{entity.category}}</td>
+            <td>
+                <ul>
+                    <li>
+                        <a href="{{ path('auto_slider_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('auto_slider_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<ul>
+    <li>
+        <a href="{{ path('auto_slider_new') }}">
+            Create a new entry
+        </a>
+    </li>
+</ul>
