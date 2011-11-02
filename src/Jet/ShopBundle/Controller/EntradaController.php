@@ -15,7 +15,7 @@ class EntradaController extends Controller
 	public function indexAction($category)
 	{
 		$em = $this->getDoctrine()->getEntityManager();
-		$slider = $em->getRepository('JetShopBundle:Slider')->findAll();
+		$slider = array();
 		$categories = $em->getRepository('JetShopBundle:Category')->findAll();
 		$subcategories = array();
 		$product = array();
@@ -26,6 +26,7 @@ class EntradaController extends Controller
 				$category=$aux;
 				$subcategories = $em->getRepository('JetShopBundle:Subcategory')->findByCategory($aux->getId());
 				$product = $em->getRepository('JetShopBundle:Product')->findByCategory($aux->getId());
+				$slider = $em->getRepository('JetShopBundle:Slider')->findByCategory($aux->getId());
 			}
 			else{
 					

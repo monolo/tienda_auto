@@ -28,7 +28,7 @@
 			<div id="navigation">
 				<ul>
 				    <li><a href="{{path('entrada_index')}}, { 'category' : 'home' }}">Home</a></li>
-					<li class="last"><a href="#">Contact</a></li>
+					<li class="last"><a href="#">Contacto</a></li>
 				</ul>
 			</div>
 		</div>
@@ -60,25 +60,13 @@
 		
 		<!-- Search, etc -->
 		<div class="options">
-			<div class="search">
-				<form action="" method="post">
-					<span class="field"><input type="text" class="blink" value="SEARCH" title="SEARCH" /></span>
-					<input type="text" class="search-submit" value="GO" />
-				</form>
-			</div>
-			<span class="left"><a href="#">Advanced Search</a></span>
-			
-			<div class="right">
-				<span class="cart">
-					<a href="#" class="cart-ico">&nbsp;</a>
-					<strong>$0.00</strong>
-				</span>
-				<span class="left more-links">
-					<a href="#">Checkout</a>
-					<a href="#">Details</a>
-				</span>
-			</div>
+			<ul >
+				{% for aux in categories %}
+					<li><a href="{{ path('entrada_index', { 'category':aux.name }) }}">{{aux.name}}</a></li>
+				{% endfor %}
+			</ul>
 		</div>
+		
 		<!-- End Search, etc -->
 		
 		<!-- Content -->
@@ -484,34 +472,25 @@
 						</div>
 					</div>
 					<!-- End Third Tab Content -->
-					
+					<script type="text/javascript"><!--
+						google_ad_client = "ca-pub-9599693085330803";
+						/* comertial */
+						google_ad_slot = "8535534293";
+						google_ad_width = 728;
+						google_ad_height = 90;
+						//-->
+					</script>
+					<script type="text/javascript"
+						src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+					</script>
 				</div>
-				
-				<!-- Brands -->
-				<div class="brands">
-					<h3>Brands</h3>
-					<div class="logos">
-						<a href="#"><img src="css/images/logo1.gif" alt="" /></a>
-						<a href="#"><img src="css/images/logo2.gif" alt="" /></a>
-						<a href="#"><img src="css/images/logo3.gif" alt="" /></a>
-						<a href="#"><img src="css/images/logo4.gif" alt="" /></a>
-						<a href="#"><img src="css/images/logo5.gif" alt="" /></a>
-					</div>
-				</div>
-				<!-- End Brands -->
 				
 				<!-- Footer -->
 				<div id="footer">
 					<div class="left">
 						<a href="#">Home</a>
 						<span>|</span>
-						<a href="#">Support</a>
-						<span>|</span>
-						<a href="#">My Account</a>
-						<span>|</span>
-						<a href="#">The Store</a>
-						<span>|</span>
-						<a href="#">Contact</a>
+						<a href="#">Contacto</a>
 					</div>
 					<div class="right">
 						&copy; Sitename.com. Design by <a href="http://chocotemplates.com" target="_blank" title="CSS Templates">ChocoTemplates.com</a>
