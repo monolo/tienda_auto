@@ -62,7 +62,7 @@ h1#logo a{ display:block; height:61px; text-indent: -4000px; background:url(imag
 .search-submit{ float:left; font-size:0; line-height:0; width:24px; height:27px; background:url(images/search.gif); text-indent: -4000px; border:0; margin-left:9px; cursor:pointer; position:relative; top:1px; margin-right:13px;}
 
 #category{ padding-top: 10px; list-style-type: none;}
-#category li{float: left; padding-right: 10px; margin-right: 10px; font-size: 15px; text-shadow:#666666 1px 0px 0px;}
+#category li{float: left; padding-right: 10px; margin-right: 10px; font-size: 15px; text-shadow:#666666 0.5px 0px 0px;}
 .options a { color:#636363;}
 .options a:hover { color:#890000; text-decoration: none;}
 .options a.active {color:#890000;}
