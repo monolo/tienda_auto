@@ -19,19 +19,32 @@ class EntradaController extends Controller
 		$categories = $em->getRepository('JetShopBundle:Category')->findAll();
 		$subcategories = array();
 		$product = array();
+                $response = array();
+                
 		foreach($categories as $aux)
 		{
-			if($aux->getName()==$category || $category=='home')
+			if(mb_strtolower($aux->getName(), "UTF-8") == $category || $category =='home')
 			{
-				$category=$aux;
-				$subcategories = $em->getRepository('JetShopBundle:Subcategory')->findByCategory($aux->getId());
-				$product = $em->getRepository('JetShopBundle:Product')->findByCategory($aux->getId());
-				$slider = $em->getRepository('JetShopBundle:Slider')->findByCategory($aux->getId());
-			}
+                            $category=$aux;
+                            $subcategories = $em->getRepository('JetShopBundle:Subcategory')->findByCategory($aux->getId());
+                            $product = $em->getRepository('JetShopBundle:Product')->findByCategory($aux->getId());
+                            $slider = $em->getRepository('JetShopBundle:Slider')->findByCategory($aux->getId());
+                            $response = array('category' => $category, 'categories' => $categories, 'product' => $product, 'subcategories' => $subcategories, 'slider' => $slider);
+                            break;
+                        }
 			else{
-					
+                            $response = $this->forward('JetShopBundle:Entrada:error', array('category' => $category));
 			}
 		}
-		return array('category' => $category, 'categories' => $categories, 'product' => $product, 'subcategories' => $subcategories, 'slider' => $slider);
-	}	
+		return $response;
+	}
+        
+        /**
+         * @Route("/error", name="entrada_error")
+         * @Template()
+         */
+        public function errorAction($category)
+        {
+            return array('category' => $category);
+        }
 }
