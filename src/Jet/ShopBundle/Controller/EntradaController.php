@@ -20,6 +20,7 @@ class EntradaController extends Controller
 		$subcategories = array();
 		$product = array();
                 $response = array();
+                $category = mb_strtolower($category);
                 
 		foreach($categories as $aux)
 		{
