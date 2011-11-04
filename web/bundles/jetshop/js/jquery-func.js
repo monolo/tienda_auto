@@ -22,7 +22,9 @@ $( document ).ready( function(){
 	$('.tabs a').slide({
 		'slide_selector' : '.tab-content'
 	})
-        $("a[rel^='prettyPhoto']").prettyPhoto();
+        $("a[rel^='prettyPhoto']").prettyPhoto({
+            social_tools: false
+        });
 });
 function _init_carousel(carousel) {
 	$('#slider-nav .next').bind('click', function() {
