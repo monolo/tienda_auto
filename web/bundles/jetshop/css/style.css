@@ -112,6 +112,8 @@ h1#logo a{ display:block; height:61px; text-indent: -4000px; background:url(imag
 
 .tabbed { min-height:420px;}
 
+#social{height: 22px; float: left; padding-top: 25px;padding-left: 20px;}
+#social div{top: -2.5px;}
 
 
 
