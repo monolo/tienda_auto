@@ -30,14 +30,19 @@ class Subcategory
     
     /**
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="subcategories")
-     * @ORM\JoinColumn(name="subcategory_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
     private $category;
     
     /**
-     * @ORM\OneToMany(targetEntity="Product", mappedBy="category")
+     * @ORM\OneToMany(targetEntity="Product", mappedBy="subcategory")
      */
     private $products;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="BotProduct", mappedBy="subcategory")
+     */
+    private $botproducts;
 
 
     /**
@@ -116,5 +121,25 @@ class Subcategory
     public function __toString()
     {
     	return $this->name; 
+    }
+
+    /**
+     * Add botproducts
+     *
+     * @param Jet\ShopBundle\Entity\BotProduct $botproducts
+     */
+    public function addBotProduct(\Jet\ShopBundle\Entity\BotProduct $botproducts)
+    {
+        $this->botproducts[] = $botproducts;
+    }
+
+    /**
+     * Get botproducts
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getBotproducts()
+    {
+        return $this->botproducts;
     }
 }

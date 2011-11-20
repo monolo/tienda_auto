@@ -57,6 +57,20 @@ class Product
      * @ORM\Column(name="item_number", type="integer")
      */
     private $item_number;
+
+    /**
+     * @var boolean $checked
+     *
+     * @ORM\Column(name="checked", type="boolean")
+     */
+    private $checked=true;
+
+    /**
+     * @var boolean $display
+     *
+     * @ORM\Column(name="display", type="boolean")
+     */
+    private $display=true;
     
     /**
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="products")
@@ -84,10 +98,8 @@ class Product
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     public $path;
-
-
-
-
+    
+    
     /**
      * @ORM\PrePersist()
      * @ORM\PreUpdate()
@@ -150,6 +162,7 @@ class Product
         // get rid of the __DIR__ so it doesn't screw when displaying uploaded doc/image in the view.
         return 'uploads/documents';
     }
+
 
     /**
      * Get id
@@ -262,6 +275,75 @@ class Product
     }
 
     /**
+     * Set checked
+     *
+     * @param boolean $checked
+     */
+    public function setChecked($checked)
+    {
+        $this->checked = $checked;
+    }
+
+    /**
+     * Get checked
+     *
+     * @return boolean 
+     */
+    public function getChecked()
+    {
+        return $this->checked;
+    }
+
+    /**
+     * Set display
+     *
+     * @param boolean $display
+     */
+    public function setDisplay($display)
+    {
+        $this->display = $display;
+    }
+
+    /**
+     * Get display
+     *
+     * @return boolean 
+     */
+    public function getDisplay()
+    {
+        return $this->display;
+    }
+    
+    public function __toString()
+    {
+    	return $this->name; 
+    }
+    public function __construct()
+    {
+        $this->product = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+    
+    /**
+     * Set path
+     *
+     * @param string $path
+     */
+    public function setPath($path)
+    {
+        $this->path = $path;
+    }
+
+    /**
+     * Get path
+     *
+     * @return string 
+     */
+    public function getPath()
+    {
+        return $this->path;
+    }
+
+    /**
      * Set category
      *
      * @param Jet\ShopBundle\Entity\Category $category
@@ -302,30 +384,6 @@ class Product
     }
 
     /**
-     * Set path
-     *
-     * @param string $path
-     */
-    public function setPath($path)
-    {
-        $this->path = $path;
-    }
-
-    /**
-     * Get path
-     *
-     * @return string 
-     */
-    public function getPath()
-    {
-        return $this->path;
-    }
-    public function __construct()
-    {
-        $this->product = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-    
-    /**
      * Add product
      *
      * @param Jet\ShopBundle\Entity\Slider $product
@@ -343,9 +401,5 @@ class Product
     public function getProduct()
     {
         return $this->product;
-    }
-    public function __toString()
-    {
-    	return $this->name; 
     }
 }

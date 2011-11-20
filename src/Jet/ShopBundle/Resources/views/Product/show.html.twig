@@ -27,8 +27,16 @@
             <td>{{ entity.itemnumber }}</td>
         </tr>
         <tr>
-            <th></th>
-            <td><img src="{{ asset(entity.getWebPath) }}" alt="some_text"/></td>
+            <th>Checked</th>
+            <td>{{ entity.checked }}</td>
+        </tr>
+        <tr>
+            <th>Display</th>
+            <td>{{ entity.display }}</td>
+        </tr>
+        <tr>
+            <th>Path</th>
+            <td>{{ entity.path }}</td>
         </tr>
     </tbody>
 </table>

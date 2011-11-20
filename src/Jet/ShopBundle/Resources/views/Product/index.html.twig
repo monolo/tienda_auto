@@ -1,16 +1,3 @@
-<h2>
-	<ul>
-		<li>
-			<a href="{{path('auto_category')}}">Category</a>
-		</li>
-		<li>
-			<a href="{{path('auto_subcategory')}}">Subcategory</a>
-		</li>
-		<li>
-			<a href="{{path('auto_slider')}}">Slider</a>
-		</li>
-	</ul>
-</h2>
 <h1>Product list</h1>
 
 <table class="records_list">
@@ -22,7 +9,9 @@
             <th>Size_list</th>
             <th>Comment</th>
             <th>Item_number</th>
-            <th></th>
+            <th>Checked</th>
+            <th>Display</th>
+            <th>Path</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -35,7 +24,9 @@
             <td>{{ entity.sizelist }}</td>
             <td>{{ entity.comment }}</td>
             <td>{{ entity.itemnumber }}</td>
-            <td><img src="{{ asset(entity.getWebPath) }}" alt="some_text"/></td>
+            <td>{{ entity.checked }}</td>
+            <td>{{ entity.display }}</td>
+            <td>{{ entity.path }}</td>
             <td>
                 <ul>
                     <li>

@@ -1,25 +1,25 @@
-<h1>Category list</h1>
+<h1>BotProduct list</h1>
 
 <table class="records_list">
     <thead>
         <tr>
             <th>Id</th>
-            <th>Name</th>
+            <th>Subcategory51bab</th>
             <th>Actions</th>
         </tr>
     </thead>
     <tbody>
     {% for entity in entities %}
         <tr>
-            <td><a href="{{ path('auto_category_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-            <td>{{ entity.name }}</td>
+            <td><a href="{{ path('auto_botproduct_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+            <td>{{ entity.subcategory51bab }}</td>
             <td>
                 <ul>
                     <li>
-                        <a href="{{ path('auto_category_show', { 'id': entity.id }) }}">show</a>
+                        <a href="{{ path('auto_botproduct_show', { 'id': entity.id }) }}">show</a>
                     </li>
                     <li>
-                        <a href="{{ path('auto_category_edit', { 'id': entity.id }) }}">edit</a>
+                        <a href="{{ path('auto_botproduct_edit', { 'id': entity.id }) }}">edit</a>
                     </li>
                 </ul>
             </td>
@@ -30,7 +30,7 @@
 
 <ul>
     <li>
-        <a href="{{ path('auto_category_new') }}">
+        <a href="{{ path('auto_botproduct_new') }}">
             Create a new entry
         </a>
     </li>

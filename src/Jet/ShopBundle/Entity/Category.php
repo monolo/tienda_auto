@@ -34,12 +34,17 @@ class Category
     private $products;
     
     /**
-     * @ORM\OneToMany(targetEntity="Subcategory", mappedBy="subcategory")
+     * @ORM\OneToMany(targetEntity="BotProduct", mappedBy="category")
+     */
+    private $botproducts;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Subcategory", mappedBy="category")
      */
     private $subcategories;
     
     /**
-     * @ORM\OneToMany(targetEntity="Slider", mappedBy="slider")
+     * @ORM\OneToMany(targetEntity="Slider", mappedBy="category")
      */
     private $slider;
 
@@ -141,5 +146,25 @@ class Category
     public function getSlider()
     {
         return $this->slider;
+    }
+
+    /**
+     * Add botproducts
+     *
+     * @param Jet\ShopBundle\Entity\BotProduct $botproducts
+     */
+    public function addBotProduct(\Jet\ShopBundle\Entity\BotProduct $botproducts)
+    {
+        $this->botproducts[] = $botproducts;
+    }
+
+    /**
+     * Get botproducts
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getBotproducts()
+    {
+        return $this->botproducts;
     }
 }
