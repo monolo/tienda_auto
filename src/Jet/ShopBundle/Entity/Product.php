@@ -63,7 +63,7 @@ class Product
      *
      * @ORM\Column(name="checked", type="boolean")
      */
-    private $checked=true;
+    private $checked=false;
 
     /**
      * @var boolean $display

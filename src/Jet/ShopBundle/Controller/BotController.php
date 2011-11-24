@@ -58,8 +58,10 @@ class BotController extends Controller {
         $botproducts = $em->getRepository('JetShopBundle:BotProduct')->findAll();
         $checkeds = $em->getRepository('JetShopBundle:Product')->findByChecked(1);
         foreach($checkeds as $checked){
-        	$checked->setDisplay(0);
+        	if($checked->getChecked()==1){
+        		$checked->setDisplay(0);
                 $em->flush();
+            }
         }
         //save database
         foreach ($botproducts as $botproduct) {
