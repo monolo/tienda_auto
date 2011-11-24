@@ -15,8 +15,6 @@ class ProductType extends AbstractType
             ->add('size_list')
             ->add('comment')
             ->add('item_number')
-            ->add('checked')
-            ->add('display')
             ->add('file')
             ->add('category')
             ->add('subcategory')
