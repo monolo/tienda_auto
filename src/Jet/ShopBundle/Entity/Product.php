@@ -231,7 +231,7 @@ class Product
      */
     public function getSizeList()
     {
-        return $this->size_list;
+        return explode("/",$this->size_list);
     }
 
     /**

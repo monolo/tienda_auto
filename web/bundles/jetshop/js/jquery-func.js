@@ -1,4 +1,5 @@
 $( document ).ready( function(){
+	$("#precio").html($('.carts ul').attr('title')+"€");
 	$('.blink')
 		.focus(function(){
 			if( $(this).attr('value') == $(this).attr('title') ) {
@@ -37,6 +38,12 @@ function _init_carousel(carousel) {
 		return false;
 	});
 };
+function ajaxcart(carturl){
+	$.ajax({ url: carturl, type:'GET' , success: function(response) {
+      $('.carts').html(response);
+      $("#precio").html($('.carts ul').attr('title')+"€");
+    }});
+}
 
 /* ------------------------------------------------------------------------
 	Class: prettyPhoto

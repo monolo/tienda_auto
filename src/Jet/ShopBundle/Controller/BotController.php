@@ -73,6 +73,7 @@ class BotController extends Controller {
             $result = curl($url . $linkes[0]);
 
             $bollink = true;
+            $itemnumber2=0;
             for ($j = 0; $bollink == true; $j++) {
                 $linktd = array();
                 preg_match_all("#<a\s*class=\"60pxborder[^>]*>#is", $result, $tds);
@@ -114,14 +115,19 @@ class BotController extends Controller {
                 preg_match("#\d*\.\w*#is", $nameimage[0], $nameimage2);
                 preg_match("#=[^%]*%#is", $image[0], $auxdateimage);
                 preg_match("#[^=][^%]*#is", $auxdateimage[0], $dateimage);
-                saveImage($url . "/smallImage/big/" . $dateimage[0] . "/" . $nameimage2[0], "/Users/manuel/www/tienda_auto/web/uploads/documents/" . $nameimage2[0]);
+                $directorio="/Users/manuel/www/tienda_auto/web/uploads/documents/" . $nameimage2[0];
 
                 //item number
                 preg_match("#Item\s*Code\s*\:\s*\d*#is", $result, $auxitem_number);
                 preg_match("#\d+#is", $auxitem_number[0], $item_number);
                 $item_number = $item_number[0];
+                if($item_number!=0){
+                    $itemnumber2=$item_number;
+                }
+                
                 $products = $em->getRepository('JetShopBundle:Product')->findOneByName($name);
                 if (!$products) {
+                    saveImage($url . "/smallImage/big/" . $dateimage[0] . "/" . $nameimage2[0], $directorio);
                     $product = new Product();
                     $product->setItemNumber($item_number);
                     $product->setName($name);
@@ -131,30 +137,45 @@ class BotController extends Controller {
                     $product->setComment("prueba");
                     $product->setCategory($botproduct->getCategory());
                     $product->setSubcategory($botproduct->getSubcategory());
-                    $product->setChecked(1);
+                    if((filesize($directorio)/1024)<25){
+                        $product->setDisplay(0);
+                    }
+                    else{
                     $product->setDisplay(1);
+                    }
+                    $product->setChecked(1);
                     $em->persist($product);
                     $em->flush();
                     
                 } else {
-                    $products->setItemNumber($item_number);
-                    $products->setName($name);
-                    $products->setPath($nameimage2[0]);
+                    if(file_exists($directorio)==false||(filesize($directorio)/1024)<25){
+                        saveImage($url . "/smallImage/big/" . $dateimage[0] . "/" . $nameimage2[0], $directorio);
+                    }
+                    if($products->getItemNumber()==1||$item_number!=1){
+                        if($item_number==1){
+                            $item_number=$itemnumber2-1;
+                        }
+                        $products->setItemNumber($item_number);
+                    }
                     $products->setPrice($price);
                     $products->setSizeList($size_list);
-                    $products->setComment("prueba");
                     $products->setCategory($botproduct->getCategory());
                     $products->setSubcategory($botproduct->getSubcategory());
                     $products->setChecked(1);
-                    $products->setDisplay(1);
+                    if((filesize($directorio)/1024)<25){
+                        $products->setDisplay(0);
+                    }
+                    else{
+                        $products->setDisplay(1);
+                    }
                     $em->flush();
                 }
 
                 if ($j == 0) {
                     $result = curl($url . $linktd[1]);
                     $bollink = true;
-                } else if (sizeof($linktd) == 3) {
-                    $result = curl($url . $linktd[2]);
+                } else if (sizeof($linktd) == 2) {
+                    $result = curl($url . $linktd[1]);
                     $bollink = true;
                 } else {
                     $bollink = false;

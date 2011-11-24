@@ -3,13 +3,20 @@
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 	<title>Comertial</title>
-        <script src="http://code.jquery.com/jquery-1.6.3.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="http://code.jquery.com/jquery-1.7.min.js" type="text/javascript" charset="utf-8"></script>
 	<link rel="stylesheet" href="{{asset('bundles/jetshop/css/style.css')}}" type="text/css" media="all" />
-        <link rel="shortcut icon" href="{{asset('bundle/jetshop/images/logo.ico')}}" type="image/x-icon"/>
+    <link rel="shortcut icon" href="{{asset('bundle/jetshop/images/logo.ico')}}" type="image/x-icon"/>
 	<!--[if let IE 6]>
 		<style type="text/css" media="screen">
 			.tabbed { height:420px; }
 		</style>
+	<![endif]-->
+	<!--[if gte IE 9]>
+  		<style type="text/css">
+    		.gradient {
+       		filter: none;
+    		}
+  		</style>
 	<![endif]-->
 	<script src="{{asset('bundles/jetshop/js/jquery.jcarousel.pack.js')}}" type="text/javascript"></script>
 	<script src="{{asset('bundles/jetshop/js/jquery.slide.js')}}" type="text/javascript"></script>
@@ -28,7 +35,55 @@
   })();
 
 </script>
+<script>
+    $( document ).ready( function(){
+        {% for aux in subcategories %}
+                $("#slider{{ aux.id }} ol li a").click(function(){
+                	$(".pager a").css("background-color", "#FFD700")
+                	$(this).css("background-color", "#FFF");
+                    $("#slider{{aux.id}} .activo").removeClass("activo").addClass("noactivo");
+                    var num=$(this).attr("rel");
+                    $("#slider{{ aux.id }}-"+num).removeClass("noactivo").addClass("activo");
+                });
+        {% endfor %}
+        $("#detalles").click(function(){
+        	if($(".carts").css("display")=="none"){
+        		$(".carts").css("display","block");
+        	}
+        	else{
+        		$(".carts").css("display","none");
+        	}
+        });
+        $(".cart-ico").click(function(){
+        	if($(".carts").css("display")=="none"){
+        		$(".carts").css("display","block");
+        	}
+        	else{
+        		$(".carts").css("display","none");
+        	}
+        });
+        $(".anadir a").click(function(){
+        	var carturl=$(this).attr('rel');
+        	var productid=$(this).attr('id');
+        	var talla=$(this).parent().parent().find('.tallas').val();
+        	carturl=carturl+"/add/"+productid+"/"+talla;
+        	if(talla==0){
+        		alert("Selecciona una talla");
+        	}
+        	else{
+        		ajaxcart(carturl);
+        	}
+        });
+        $(".remove").click(function(){
+       		ajaxcart($(this).attr('rel'));
+        });
+        $(".remove").live("click", function(){
+        	ajaxcart($(this).attr('rel'));
+        });
         
+    });
+    
+</script>
 </head>
 <body>
 <!-- Top -->
@@ -47,7 +102,7 @@
 		
 		<!-- Header -->
 		<div id="header">
-			<h1 id="logo"><a href="{{path('entrada_index', {'category': 'home'})}}">Comertial</a></h1>
+                        <a style="float: left;"href="{{path('entrada_index', {'category': 'home'})}}"><img src="{{asset('bundles/jetshop/css/images/logo.jpg')}}" height="72" width="248" alt="" /></a>
                         <div id="social">
                             <a href="http://www.tuenti.com/share" class="tuenti-share-button" icon-style="light" share-url="http://www.comertial.com"></a>                            
                             <div class="fb-like" data-href="http://www.facebook.com/pages/comertial/241172119269251" data-send="false" data-layout="button_count" data-show-faces="false" data-font="arial"></div>
@@ -65,8 +120,8 @@
 		<div id="slider">
 			<div id="slider-holder">
 				<ul>
-                                    {% for aux in slider %}
-                                        <li><a href="#"><img src="{{ asset(aux.getWebPath) }}" alt="" /></a></li>
+                    {% for aux in slider %}
+                    	<li><a href="#"><img src="{{ asset(aux.getWebPath) }}" alt="" /></a></li>
 				    {% endfor %}
 				</ul>
 			</div>
@@ -87,16 +142,31 @@
 		
 		<!-- Search, etc -->
 		<div class="options">
-                    <ul id="category">
-                        {% for aux in categories %}
-                            {% if aux.name==category %}
-                                <li><a class="active" href="{{ path('entrada_index', { 'category': (aux.name|lower) }) }}">{{aux.name|title}}</a></li>
-                            {% else %}
-                                <li><a href="{{ path('entrada_index', { 'category': (aux.name|lower) }) }}">{{aux.name|title}}</a></li>
-                            {% endif %}    
-                        {% endfor %}
-                    </ul>
+                    <div class="left">
+                        <ul id="category">
+                            {% for aux in categories %}
+                                {% if aux.name==category %}
+                                    <li><a class="active" href="{{ path('entrada_index', { 'category': (aux.name|lower) }) }}">{{aux.name|title}}</a></li>
+                                {% else %}
+                                    <li><a href="{{ path('entrada_index', { 'category': (aux.name|lower) }) }}">{{aux.name|title}}</a></li>
+                                {% endif %}    
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="right">
+                        <span class="cart">
+                            <a class="cart-ico">&nbsp;</a>
+                            <strong id="precio"></strong>
+                        </span>
+                        <span class="left more-links">
+                            <a href="{{path ('entrada_checkout')}}">Comprar</a>
+                            <a id="detalles">Detalles</a>
+                        </span>
+                    </div>
 		</div>
+                <div class="carts">
+                    {% include 'JetShopBundle:Cart:cart.html.twig' with {'cart': cart, 'products': products, 'category': category.getName} %}
+                </div>
 		
 		<!-- End Search, etc -->
 		
@@ -126,31 +196,69 @@
 					<!-- Tabs Content -->
                                         {% for aux in subcategories %}
                                             {% if loop.first %}
-                                                <div class="tab-content" style="display:block;">
+                                                <div class="tab-content" style="display:block;" id="slider{{ aux.id }}">
                                             {% else %}
-                                                <div class="tab-content">
+                                                <div class="tab-content" id="slider{{ aux.id }}">
                                             {% endif %}
-                                                    <div class="items">
-                                                            <div class="cl">&nbsp;</div>
+                                            {% set i=0 %}
+                                                    <ul>
+                                            {% for auxproduct in product %}
+                                                {% if auxproduct.subcategory == aux.name %}
+                                                    {% if (i%20)==0 %}
+                                                            <li id="slider{{ aux.id }}-{{((i-(i%20))/20)+1}}" class="{% if i==0 %}activo{% else %}noactivo{% endif %}">    
+                                                            <div class="items">
+                                                                <div class="cl">&nbsp;</div>
                                                                 <ul class="gallery clearfix">
-                                                                    {% for auxproduct in product %}
-                                                                        {% if auxproduct.subcategory == aux.name %}
-                                                                            <li>
-                                                                                <div class="image">
-                                                                                    <a href="{{asset(auxproduct.getWebPath)}}" rel="prettyPhoto[{{aux.name}}]"><img src="{{asset(auxproduct.getWebPath)}}" height="83" width="126" alt="" /></a>
-                                                                                </div>
-                                                                                <p>
-                                                                                        Num. Referencia: <span>{{auxproduct.getItemNumber}}</span><br />
-                                                                                        Lista Tallas : <span>{{auxproduct.getSizeList}}</span><br />
-                                                                                        Nombre Producto: <a href="#">{{auxproduct.getName}}</a>
-                                                                                </p>
-                                                                                <p class="price">Precio: <strong>{{auxproduct.getPrice}} €</strong></p>
-                                                                            </li>
-                                                                        {% endif %}
-                                                                    {% endfor %}
+                                                    {% endif%}
+                                                                    <li>
+                                                                        <div class="image">
+                                                                            <a href="{{asset(auxproduct.getWebPath)}}" rel="prettyPhoto[{{aux.name}}]"><img src="{{asset(auxproduct.getWebPath)}}" height="83" width="126" alt="" /></a>
+                                                                        </div>
+                                                                        <p>
+                                                                            Num. Referencia: <span>{{auxproduct.getItemNumber}}</span><br />
+                                                                            Lista Tallas : <span>
+                                                                            <select class="tallas" name="tallas" id="talla_{{auxproduct.getId}}">
+                                                                            	<option value="0">Selecciona talla</option>
+                                                                            {% for size in auxproduct.getSizeList() %}
+																				<option value="{{ size }}">{{ size }}</option>
+                                                                            {% endfor %}
+                                                                            </select>
+                                                                            </span><br />
+                                                                            Nombre Producto: <a href="#">{{auxproduct.getName}}</a>
+                                                                        </p>
+                                                                        <p class="price">Precio: <strong>{{auxproduct.getPrice}} €</strong></p>
+                                                                        <div class="anadir">
+                                                                        	<a id="{{ auxproduct.getId }}" rel="{{path('entrada_index', { 'category': category.getName })}}">añadir</a>
+                                                                        </div>
+                                                                        	
+                                                                    </li>
+                                                                      
+                                                    {% if (((i+1)%20)==0) and (i!=0) %}
                                                                 </ul>
-                                                            <div class="cl">&nbsp;</div>
-                                                    </div>
+                                                                <div class="cl">&nbsp;</div>
+                                                            </div>
+                                                        </li>
+                                                    {% endif %}
+                                                    
+                                                    {% set i=i+1 %}
+                                                {% endif %}
+                                            {% endfor %}
+                                            {% if (i+1)%20!=0 %}
+                                                                </ul>
+                                                                <div class="cl">&nbsp;</div>
+                                                            </div>
+                                                        </li>
+                                            {% endif %}
+                                                    </ul>
+                                                    {% if ((i-(i%20))/20)>1 %}
+                                                        <ol class="pager">
+                                                            {% for j in 0..((i-(i%20))/20) %}
+                                                            <li>
+                                                                <a {% if j==0%}style="background-color:#FFF;"{% endif %} rel="{{ j+1 }}">{{ j+1 }}</a>
+                                                            </li>
+                                                            {% endfor %}
+                                                        </ol>
+                                                    {% endif %}
                                                 </div>
                                         {% endfor %}
 					<!-- End Tabs Content -->

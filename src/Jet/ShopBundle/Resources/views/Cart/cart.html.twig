@@ -1,0 +1,15 @@
+<ul title="{{ price }}">
+    {% for product_id, product in products %}
+    	{% for size_list, quantity in cart[product_id] %}
+        	<li>
+        		<span>{{quantity}}</span>
+        		<span>{{ product.getName }}</span>
+        		<span>{{size_list}}</span>
+        		<span>{{ product.getPrice }}€</span>
+        		<a class="remove" rel="{{path('remove_cart', {'category' : category, 'id': product.id, 'size_list': size_list})}}"><img src="{{asset('bundles/jetshop/images/icon-x.gif')}}" /></a>
+        	</li>
+        {% endfor %}
+    {% else %}
+    No ha añadido ningún producto
+    {% endfor %}
+</ul>
