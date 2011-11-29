@@ -5,12 +5,12 @@ namespace Jet\ShopBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Jet\ShopBundle\Entity\Category
+ * Jet\ShopBundle\Entity\Subcategory
  *
  * @ORM\Table()
  * @ORM\Entity
  */
-class Category
+class Subcategory
 {
     /**
      * @var integer $id
@@ -29,24 +29,20 @@ class Category
     private $name;
     
     /**
-     * @ORM\OneToMany(targetEntity="Product", mappedBy="category")
+     * @ORM\ManyToOne(targetEntity="Category", inversedBy="subcategories")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
+     */
+    private $category;
+    
+    /**
+     * @ORM\OneToMany(targetEntity="Product", mappedBy="subcategory")
      */
     private $products;
     
     /**
-     * @ORM\OneToMany(targetEntity="Subcategory", mappedBy="category")
-     */
-    private $subcategories;
-    
-    /**
-     * @ORM\OneToMany(targetEntity="BotProduct", mappedBy="category")
+     * @ORM\OneToMany(targetEntity="BotProduct", mappedBy="subcategory")
      */
     private $botproducts;
-    
-    /**
-     * @ORM\OneToMany(targetEntity="Slider", mappedBy="category")
-     */
-    private $slider;
 
 
     /**
@@ -81,9 +77,28 @@ class Category
     public function __construct()
     {
         $this->products = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->subcategories = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
+    /**
+     * Set category
+     *
+     * @param Jet\ShopBundle\Entity\Category $category
+     */
+    public function setCategory(\Jet\ShopBundle\Entity\Category $category)
+    {
+        $this->category = $category;
+    }
+
+    /**
+     * Get category
+     *
+     * @return Jet\ShopBundle\Entity\Category 
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
     /**
      * Add products
      *
@@ -103,51 +118,10 @@ class Category
     {
         return $this->products;
     }
-
-    /**
-     * Add subcategories
-     *
-     * @param Jet\ShopBundle\Entity\Subcategory $subcategories
-     */
-    public function addSubcategory(\Jet\ShopBundle\Entity\Subcategory $subcategories)
-    {
-        $this->subcategories[] = $subcategories;
-    }
-
-    /**
-     * Get subcategories
-     *
-     * @return Doctrine\Common\Collections\Collection 
-     */
-    public function getSubcategories()
-    {
-        return $this->subcategories;
-    }
     public function __toString()
     {
     	return $this->name; 
     }
-
-    /**
-     * Add slider
-     *
-     * @param Jet\ShopBundle\Entity\Slider $slider
-     */
-    public function addSlider(\Jet\ShopBundle\Entity\Slider $slider)
-    {
-        $this->slider[] = $slider;
-    }
-
-    /**
-     * Get slider
-     *
-     * @return Doctrine\Common\Collections\Collection 
-     */
-    public function getSlider()
-    {
-        return $this->slider;
-    }
-
 
     /**
      * Add botproducts

@@ -119,24 +119,4 @@ class BotProduct
     {
         return $this->checked;
     }
-
-    /**
-     * Set category
-     *
-     * @param Jet\ShopBundle\Entity\Category $category
-     */
-    public function setCategory(\Jet\ShopBundle\Entity\Category $category)
-    {
-        $this->category = $category;
-    }
-
-    /**
-     * Get category
-     *
-     * @return Jet\ShopBundle\Entity\Category 
-     */
-    public function getCategory()
-    {
-        return $this->category;
-    }
 }

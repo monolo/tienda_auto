@@ -4,7 +4,8 @@
     <thead>
         <tr>
             <th>Id</th>
-            <th>Subcategory51bab</th>
+            <th>Urlproduct</th>
+            <th>Checked</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -12,7 +13,8 @@
     {% for entity in entities %}
         <tr>
             <td><a href="{{ path('auto_botproduct_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-            <td>{{ entity.subcategory51bab }}</td>
+            <td>{{ entity.urlproduct }}</td>
+            <td>{{ entity.checked }}</td>
             <td>
                 <ul>
                     <li>

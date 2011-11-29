@@ -10,9 +10,10 @@ class BotProductType extends AbstractType
     public function buildForm(FormBuilder $builder, array $options)
     {
         $builder
-            ->add('subcategory51bab')
-            ->add('category')
+            ->add('urlproduct')
+            ->add('checked')
             ->add('subcategory')
+            ->add('category')
         ;
     }
 
