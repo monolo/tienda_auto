@@ -177,7 +177,7 @@ class BotController extends Controller {
                 if ($j == 0) {
                     $result = curl($url . $linktd[1]);
                     $bollink = true;
-                } else if (sizeof($linktd) == 3) {
+                } else if (sizeof($linktd) == 2) {
                     $result = curl($url . $linktd[1]);
                     $bollink = true;
                 } else {
