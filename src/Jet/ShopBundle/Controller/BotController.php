@@ -11,75 +11,81 @@ use Jet\ShopBundle\Entity\Subcategory;
 class BotController extends Controller {
 
     /**
-     * @Route("/auto/bot", name="auto_bot")
+     * @Route("/auto/robot/{valor}", name="auto_robot", defaults={"valor" = 0})
      * @Template()
      */
-    public function indexAction() {
+    public function indexAction($valor) {
 
-        function curl($url) {
+        function GET($url) {
             $curl = curl_init();
+            $header[] = "Accept: text/xml,application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5";
+            $header[] = "Cache-Control: max-age=0";
+            $header[] = "Connection: keep-alive";
+            $header[] = "Keep-Alive: 300";
+            $header[] = "Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7";
+            $header[] = "Accept-Language: en-us,en;q=0.5";
+            $header[] = "Pragma: "; // browsers keep this blank.
             curl_setopt($curl, CURLOPT_URL, $url);
+            curl_setopt($curl, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1.15) Gecko/2008111317  Firefox/3.0.4');
+            curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+            curl_setopt($curl, CURLOPT_REFERER, 'http://www.google.com');
+            curl_setopt($curl, CURLOPT_ENCODING, 'gzip,deflate');
+            curl_setopt($curl, CURLOPT_AUTOREFERER, true);
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($curl, CURLOPT_TIMEOUT, 10);
+            //Si no se Logra Ejecutar file_get_contents
+            if (!$html = curl_exec($curl)) {
+                $html = file_get_contents($url);
+            }
 
-            $result = curl_exec($curl);
             curl_close($curl);
-            return $result;
+            return $html;
         }
 
-        function saveImage($url, $path) {
-            $c = curl_init();
-            curl_setopt($c, CURLOPT_URL, $url);
-            curl_setopt($c, CURLOPT_HEADER, 0);
-            curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
-            $s = curl_exec($c);
-            curl_close($c);
-            $f = fopen($path, 'wb');
-            $z = fwrite($f, $s);
-            if ($z != false)
-                return true;
-            return false;
-        }
+        $resultado;
 
-        $url = "http://www.51bab.es";
-        /*$subcategories = array();
-        $result = curl('http://www.51bab.es/sitemap.php');
-        //links
-        if (preg_match_all("#<\s*a[^>]*>[^<]+</a>#is", $result, $links)) {
-            foreach ($links[0] as $link) {
-                preg_match("#>[^<]*<#is", $link, $linka);
-                @preg_match("#[^>][^<]*#is", $linka[0], $nomo);
-
-                preg_match("#href=\"[^(\")]*\"#is", $link, $linke);
-                @preg_match("#[^(href=\")][^(\")]*#is", $linke[0], $linkes);
-                @$subcategories[$nomo[0]] = $linkes[0];
+        function save_image($img, $fullpath) {
+            $ch = curl_init($img);
+            curl_setopt($ch, CURLOPT_HEADER, 0);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_BINARYTRANSFER, 1);
+            $rawdata = curl_exec($ch);
+            curl_close($ch);
+            if (file_exists($fullpath)) {
+                unlink($fullpath);
             }
-        }*/
-
-        //select botproduct
-        $em = $this->getDoctrine()->getEntityManager();
-        $botproducts = $em->getRepository('JetShopBundle:BotProduct')->findByChecked(1);
-        $checkeds = $em->getRepository('JetShopBundle:Product')->findByChecked(1);
-        foreach ($checkeds as $checked) {
-            if ($checked->getChecked() == 1) {
-                $checked->setDisplay(0);
-                $em->flush();
-            }
+            $fp = fopen($fullpath, 'x');
+            fwrite($fp, $rawdata);
+            fclose($fp);
         }
-        foreach ($botproducts as $botproduct) {
-            $checkeds = $em->getRepository('JetShopBundle:Product')->findByChecked(1);
-            foreach ($checkeds as $checked) {
-                if ($checked->getChecked() == 1) {
-                    $checked->setDisplay(0);
-                    $em->flush();
+
+        if ($valor == 1) {
+            $em = $this->getDoctrine()->getEntityManager();
+            $botproduct = $em->getRepository('JetShopBundle:BotProduct')->findOneByChecked(1);
+
+            $productos;
+            $result;
+            if (!$botproduct) {
+                $valor = 0;
+            } else {
+                if ($botproduct->getSaveurl() == "null") {
+                    $productos = $em->getRepository('JetShopBundle:Product')->findBySubcategory($botproduct->getSubcategory()->getId());
+                    foreach ($productos as $producto) {
+                        if ($producto->getChecked() == 1) {
+                            $producto->setDisplay(0);
+                            $em->flush();
+                        }
+                    }
+                    $result = GET($botproduct->getUrlproduct());
+                } else {
+                    $result = GET($botproduct->getSaveurl());
                 }
-            }
-        }
-        //save database
-        foreach ($botproducts as $botproduct) {
-            $result = curl($botproduct->getUrlproduct());
 
-            $bollink = true;
-            for ($j = 0; $bollink == true; $j++) {
+
+                $url = "http://www.51bab.es";
+
+                $bollink = true;
+                //for ($j = 0; ($bollink == true && $j < 1); $j++) {
                 $linktd = array();
                 preg_match_all("#<a\s*class=\"60pxborder[^>]*>#is", $result, $tds);
                 for ($i = 0; $i < sizeof($tds[0]); $i++) {
@@ -120,17 +126,16 @@ class BotController extends Controller {
                 preg_match("#\d*\.\w*#is", $nameimage[0], $nameimage2);
                 preg_match("#=[^%]*%#is", $image[0], $auxdateimage);
                 preg_match("#[^=][^%]*#is", $auxdateimage[0], $dateimage);
-                $directorio = "/var/www/comertial.com/web/uploads/documents/" . $nameimage2[0];
+                $directorio = "/Users/manuel/www/tienda_auto/web/uploads/documents/" . $nameimage2[0];
 
                 //item number
                 preg_match("#Item\s*Code\s*\:[^<]*#is", $result, $auxitem_number);
                 preg_match("#[^(Item Code\:)][^<]*#is", $auxitem_number[0], $item_number);
                 $item_number = $item_number[0];
-                
-                
+
                 $products = $em->getRepository('JetShopBundle:Product')->findOneByName($name);
                 if (!$products) {
-                    saveImage($url . "/smallImage/big/" . $dateimage[0] . "/" . $nameimage2[0], $directorio);
+                    save_image($url . "/uploadImage/" . $dateimage[0] . "/" . $nameimage2[0], $directorio);
                     $product = new Product();
                     $product->setItemNumber($item_number);
                     $product->setName($name);
@@ -140,17 +145,13 @@ class BotController extends Controller {
                     $product->setComment("prueba");
                     $product->setCategory($botproduct->getCategory());
                     $product->setSubcategory($botproduct->getSubcategory());
-                    if ((filesize($directorio) / 1024) < 25) {
-                        $product->setDisplay(0);
-                    } else {
-                        $product->setDisplay(1);
-                    }
+                    $products->setDisplay(1);
                     $product->setChecked(1);
                     $em->persist($product);
                     $em->flush();
                 } else {
-                    if (file_exists($directorio) == false || (filesize($directorio) / 1024) < 25) {
-                        saveImage($url . "/smallImage/big/" . $dateimage[0] . "/" . $nameimage2[0], $directorio);
+                    if (file_exists($directorio) == false || filesize($directorio) < 20000) {
+                        save_image($url . "/uploadImage/" . $dateimage[0] . "/" . $nameimage2[0], $directorio);
                     }
                     $products->setItemNumber($item_number);
                     $products->setPrice($price);
@@ -158,34 +159,27 @@ class BotController extends Controller {
                     $products->setCategory($botproduct->getCategory());
                     $products->setSubcategory($botproduct->getSubcategory());
                     $products->setChecked(1);
-                    if ((filesize($directorio) / 1024) < 25) {
-                        $products->setDisplay(0);
-                    } else {
-                        $products->setDisplay(1);
-                    }
+                    $products->setDisplay(1);
                     $em->flush();
                 }
 
-                if ($j == 0) {
-                    $result = curl($url . $linktd[1]);
+                if (sizeof($linktd) == 2) {
+                    $result = GET($url . $linktd[1]);
                     $bollink = true;
-                } else if (sizeof($linktd) == 2) {
-                    $result = curl($url . $linktd[1]);
-                    $bollink = true;
+                    $botproduct->setSaveurl($url . $linktd[1]);
+                    $em->flush();
                 } else {
                     $bollink = false;
+                    $botproduct->setChecked(0);
+                    $em->flush();
                 }
+                //}
             }
+            $resultado = array("valor" => $valor);
+        } else {
+            $resultado = array("valor" => $valor);
         }
-        $checkedas = $em->getRepository('JetShopBundle:Product')->findByChecked(1);
-        foreach ($checkedas as $checked) {
-            if ($checked->getDisplay() == 0 && $checked->getChecked() == 1) {
-                $em->remove($checked);
-                $em->flush();
-            }
-        }
-
-        return array("hola" => "hola");
+        return $resultado;
     }
 
 }

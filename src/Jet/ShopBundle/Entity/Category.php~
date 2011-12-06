@@ -148,4 +148,24 @@ class Category
         return $this->slider;
     }
 
+
+    /**
+     * Add botproducts
+     *
+     * @param Jet\ShopBundle\Entity\BotProduct $botproducts
+     */
+    public function addBotProduct(\Jet\ShopBundle\Entity\BotProduct $botproducts)
+    {
+        $this->botproducts[] = $botproducts;
+    }
+
+    /**
+     * Get botproducts
+     *
+     * @return Doctrine\Common\Collections\Collection 
+     */
+    public function getBotproducts()
+    {
+        return $this->botproducts;
+    }
 }

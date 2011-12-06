@@ -68,9 +68,9 @@
         $(".anadir a").click(function(){
         	var carturl=$(this).attr('rel');
         	var productid=$(this).attr('id');
-        	var talla=$(this).parent().parent().find('.tallas').val();
+        	var talla=$(this).parent().parent().parent().find('.tallas').val();
         	carturl=carturl+"/add/"+productid+"/"+talla;
-        	if(talla==0){
+        	if(talla==0 || talla==undefined){
         		alert("Selecciona una talla");
         	}
         	else{
@@ -89,7 +89,6 @@
 </script>
 </head>
 <body>
-<!-- Top -->
 <div id="fb-root"></div>
 <script>(function(d, s, id) {
   var js, fjs = d.getElementsByTagName(s)[0];
@@ -98,6 +97,7 @@
   js.src = "//connect.facebook.net/es_ES/all.js#xfbml=1&appId=235080226549610";
   fjs.parentNode.insertBefore(js, fjs);
 }(document, 'script', 'facebook-jssdk'));</script>
+<!-- Top -->
 <div id="top">
 	
         <!-- Shell -->
@@ -137,14 +137,14 @@
 		<!-- End Slider -->
 		
 	</div>
+        <!-- End Shell -->
 </div>
-<!-- Top -->
+<!-- End Top -->
 
 <!-- Main -->
 <div id="main">
 	<div class="shell">
 		
-		<!-- Search, etc -->
 		<div class="options">
                     <div class="left">
                         <ul id="category">
@@ -168,11 +168,11 @@
                         </span>
                     </div>
 		</div>
+                <!-- cart -->
                 <div class="carts">
                     {% include 'JetShopBundle:Cart:cart.html.twig' with {'cart': cart, 'products': products, 'category': category.getName} %}
                 </div>
-		
-		<!-- End Search, etc -->
+                <!-- End cart -->
 		
 		<!-- Content -->
 		<div id="content">
@@ -214,6 +214,7 @@
                                                                 <div class="cl">&nbsp;</div>
                                                                 <ul class="gallery clearfix">
                                                     {% endif%}
+                                                                    <!--producto -->
                                                                     <li>
                                                                         <div class="image">
                                                                             <a href="{{asset(auxproduct.getWebPath)}}" rel="prettyPhoto[{{aux.name}}]"><img src="{{asset(auxproduct.getWebPath)}}" height="83" width="126" alt="" /></a>
@@ -230,39 +231,41 @@
                                                                             </span><br />
                                                                             Nombre Producto: <a href="#">{{auxproduct.getName}}</a>
                                                                         </p>
-                                                                        <p class="price">Precio: <strong>{{auxproduct.getPrice}} €</strong></p>
-                                                                        <div class="anadir">
-                                                                        	<a id="{{ auxproduct.getId }}" rel="{{path('entrada_index', { 'category': category.getName })}}">añadir</a>
-                                                                        </div>
+                                                                        <p class="price">Precio: <strong>{{auxproduct.getPrice}} €</strong>
+                                                                            <strong class="anadir" style="float: right;">
+                                                                                <a id="{{ auxproduct.getId }}" rel="{{path('entrada_index', { 'category': category.getName })}}"><img height="20px" width="20px" src="{{asset('bundles/jetshop/images/icon-cart.gif')}}" /></a>
+                                                                            </strong>
+                                                                        </p>
                                                                         	
                                                                     </li>
+                                                                    <!-- End producto -->
                                                                       
-                                                    {% if (((i+1)%20)==0) and (i!=0) %}
+                                                    {% if ((i+1)%20)==0 and (i!=0) %}
                                                                 </ul>
                                                                 <div class="cl">&nbsp;</div>
                                                             </div>
-                                                        </li>
+                                                            </li>
                                                     {% endif %}
                                                     
                                                     {% set i=i+1 %}
                                                 {% endif %}
                                             {% endfor %}
-                                            {% if (i+1)%20!=0 %}
+                                            {% if  ((i+1)%20)!=0 %}
                                                                 </ul>
                                                                 <div class="cl">&nbsp;</div>
                                                             </div>
-                                                        </li>
+                                                            </li>
                                             {% endif %}
                                                     </ul>
-                                                    {% if ((i-(i%20))/20)>1 %}
-                                                        <ol class="pager">
-                                                            {% for j in 0..((i-(i%20))/20) %}
-                                                            <li>
-                                                                <a {% if j==0%}style="background-color:#FFF;"{% endif %} rel="{{ j+1 }}">{{ j+1 }}</a>
-                                                            </li>
-                                                            {% endfor %}
-                                                        </ol>
-                                                    {% endif %}
+                                            {% if ((i-(i%20))/20)>1 %}
+                                                    <ol class="pager">
+                                                        {% for j in 0..((i-(i%20))/20) %}
+                                                        <li>
+                                                            <a {% if j==0%}style="background-color:#FFF;"{% endif %} rel="{{ j+1 }}">{{ j+1 }}</a>
+                                                        </li>
+                                                        {% endfor %}
+                                                    </ol>
+                                            {% endif %}
                                                 </div>
                                         {% endfor %}
 					<!-- End Tabs Content -->

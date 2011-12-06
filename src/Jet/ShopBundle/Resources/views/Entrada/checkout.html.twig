@@ -1,1 +1,38 @@
-adiós
+<html>
+    <head>
+        <title></title>
+        <script type="text/javascript" src="https://apis.google.com/js/plusone.js">
+            {lang: 'es'}
+        </script>
+        <link rel="stylesheet" href="{{asset('bundles/jetshop/css/style.css')}}" type="text/css" media="all" />
+        <link rel="shortcut icon" href="{{asset('bundle/jetshop/images/logo.ico')}}" type="image/x-icon"/>
+        <script type="text/javascript" src="http://widgets.tuenti.com/widgets.js"></script>
+    </head>
+    <body style="background-color: black;">
+        <div id="fb-root"></div>
+        <script>(function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {return;}
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/es_ES/all.js#xfbml=1&appId=235080226549610";
+            fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+        </script>
+        <div class="shell">
+            <div id="header">
+                <a style="float: left;"href="{{path('entrada_index', {'category': 'home'})}}"><img src="{{asset('bundles/jetshop/css/images/logo.jpg')}}" height="72" width="248" alt="" /></a>
+                <div id="social">
+                    <a href="http://www.tuenti.com/share" class="tuenti-share-button" icon-style="light" share-url="http://www.comertial.com"></a>                            
+                    <div class="fb-like" data-href="http://www.facebook.com/pages/comertial/241172119269251" data-send="false" data-layout="button_count" data-show-faces="false" data-font="arial"></div>
+                    <g:plusone size="medium" count="false" href="http://www.comertila.com"></g:plusone>
+                </div>
+                <div id="navigation">
+                    <ul>
+                        <li><a href="{{path('entrada_index', {'category': 'home'})}}">Home</a></li>
+                        <li class="last"><a href="#">Contacto</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

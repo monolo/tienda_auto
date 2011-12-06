@@ -5,6 +5,7 @@
         <tr>
             <th>Id</th>
             <th>Urlproduct</th>
+            <th>Saveurl</th>
             <th>Checked</th>
             <th>Actions</th>
         </tr>
@@ -14,6 +15,7 @@
         <tr>
             <td><a href="{{ path('auto_botproduct_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
             <td>{{ entity.urlproduct }}</td>
+            <td>{{ entity.saveurl }}</td>
             <td>{{ entity.checked }}</td>
             <td>
                 <ul>

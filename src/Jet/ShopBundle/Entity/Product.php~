@@ -52,9 +52,9 @@ class Product
     private $comment;
 
     /**
-     * @var integer $item_number
+     * @var string $item_number
      *
-     * @ORM\Column(name="item_number", type="integer")
+     * @ORM\Column(name="item_number", type="string", length=255)
      */
     private $item_number;
 
@@ -257,7 +257,7 @@ class Product
     /**
      * Set item_number
      *
-     * @param integer $itemNumber
+     * @param string $itemNumber
      */
     public function setItemNumber($itemNumber)
     {
@@ -267,7 +267,7 @@ class Product
     /**
      * Get item_number
      *
-     * @return integer 
+     * @return string 
      */
     public function getItemNumber()
     {

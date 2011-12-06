@@ -1,1 +1,55 @@
-{{ hola }}
+<html>
+    <head>
+        <title>robot</title>
+        <script src="http://code.jquery.com/jquery-1.7.min.js" type="text/javascript" charset="utf-8"></script>
+        <script type="text/javascript">
+        var hola=0;
+        var contenido="1";
+        $(document).ready(function(){
+            $("#escaner").click(function(){
+                if($(this).html()=="Comenzar"){
+                    $(this).html("Parar");
+                    hola=1;
+                    ajaxcart();
+                }
+                else{
+                    $(this).html("Comenzar");
+                    hola=0;
+                }
+            });
+            
+        });
+        function ajaxcart(){
+            $.ajax({ url: "http://localhost:8888/tienda_auto/web/app_dev.php/auto/robot/1", type:'GET' , success: function(response) {
+                if(hola==1 ){
+                    ajaxcart2();
+                }
+                $("#hola").html("ajax");
+                if({{valor}}==0){
+                    $("#escaner").html("Ha terminado");
+                    hola=0;
+                }
+            }});
+        }
+        function ajaxcart2(){
+            $.ajax({ url: "http://localhost:8888/tienda_auto/web/app_dev.php/auto/robot/1", type:'GET' , success: function(response) {
+                if(hola==1 ){
+                    ajaxcart();
+                }                
+                $("#hola").html("ajax2");
+                if({{valor}}==0){
+                    $("#escaner").html("Ha terminado");
+                    hola=0;
+                }
+            }});
+        }
+        </script>
+        <style>
+                #escaner{ height: 100px; width: 100px; background-color: red; }
+        </style>
+    </head>
+    <body>
+        <a id="escaner" href="#">Comenzar</a>
+        <div id="hola"></div>
+    </body>
+</html>

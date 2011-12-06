@@ -22,17 +22,24 @@ class BotProduct
     private $id;
 
     /**
-     * @var string $subcategory51bab
+     * @var string $urlproduct
      *
      * @ORM\Column(name="urlproduct", type="string", length=100)
      */
     private $urlproduct;
     
+    /**
+     * @var string $saveurl
+     *
+     * @ORM\Column(name="saveurl", type="string", length=100)
+     */
+    private $saveurl;
     
     /**
      * @ORM\ManyToOne(targetEntity="Subcategory", inversedBy="botproducts")
      * @ORM\JoinColumn(name="subcategory_id", referencedColumnName="id")
      */
+    
     private $subcategory;
     
     /**
@@ -138,5 +145,25 @@ class BotProduct
     public function getCategory()
     {
         return $this->category;
+    }
+
+    /**
+     * Set saveurl
+     *
+     * @param string $saveurl
+     */
+    public function setSaveurl($saveurl)
+    {
+        $this->saveurl = $saveurl;
+    }
+
+    /**
+     * Get saveurl
+     *
+     * @return string 
+     */
+    public function getSaveurl()
+    {
+        return $this->saveurl;
     }
 }

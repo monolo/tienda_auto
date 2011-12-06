@@ -11,6 +11,7 @@ class BotProductType extends AbstractType
     {
         $builder
             ->add('urlproduct')
+            ->add('saveurl')
             ->add('checked')
             ->add('subcategory')
             ->add('category')

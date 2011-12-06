@@ -74,10 +74,11 @@ class EntradaController extends Controller {
      */
     public function addAction($category, $id, $size_list) {
         $em = $this->getDoctrine()->getEntityManager()->getRepository('JetShopBundle:Product');
-		$cart = new Cart($this->container->get('request')->getSession());
-		$ides=$em->find($id);
-		if(isset($ides)){
-        	$cart->addItem($id,$size_list);
+        $cart = new Cart($this->container->get('request')->getSession());
+        $ides=$em->find($id);
+        settype($size_list, "integer");
+        if(isset($ides) &&  $size_list!=0){
+            $cart->addItem($id,$size_list);
         }
         $carts=$cart->getCart();
         $products=array();
