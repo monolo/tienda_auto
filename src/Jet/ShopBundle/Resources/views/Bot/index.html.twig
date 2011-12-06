@@ -20,7 +20,7 @@
             
         });
         function ajaxcart(){
-            $.ajax({ url: "http://localhost:8888/tienda_auto/web/app_dev.php/auto/robot/1", type:'GET' , success: function(response) {
+            $.ajax({ url: "{{path('auto_robot', {'valor': '1'})}}", type:'GET' , success: function(response) {
                 if(hola==1 ){
                     ajaxcart2();
                 }
@@ -32,7 +32,7 @@
             }});
         }
         function ajaxcart2(){
-            $.ajax({ url: "http://localhost:8888/tienda_auto/web/app_dev.php/auto/robot/1", type:'GET' , success: function(response) {
+            $.ajax({ url: "{{path('auto_robot', {'valor': '1'})}}", type:'GET' , success: function(response) {
                 if(hola==1 ){
                     ajaxcart();
                 }                
