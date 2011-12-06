@@ -12,7 +12,6 @@ class BotController extends Controller {
 
     /**
      * @Route("/auto/robot/{valor}", name="auto_robot", defaults={"valor" = 0})
-     * @Template()
      */
     public function indexAction($valor) {
 
@@ -175,9 +174,9 @@ class BotController extends Controller {
                 }
                 //}
             }
-            $resultado = array("valor" => $valor);
+            $resultado = $this->render('JetShopBundle:Bot:ajax.html.twig', array('valor'=>$valor));
         } else {
-            $resultado = array("valor" => $valor);
+            $resultado = $this->render('JetShopBundle:Bot:index.html.twig', array('valor'=>$valor));
         }
         return $resultado;
     }

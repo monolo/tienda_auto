@@ -21,26 +21,26 @@
         });
         function ajaxcart(){
             $.ajax({ url: "{{path('auto_robot', {'valor': '1'})}}", type:'GET' , success: function(response) {
+                if(response==0){
+                    $("#escaner").html("Ha terminado");
+                    hola=0;
+                }
                 if(hola==1 ){
                     ajaxcart2();
                 }
                 $("#hola").html("ajax");
-                if({{valor}}==0){
-                    $("#escaner").html("Ha terminado");
-                    hola=0;
-                }
             }});
         }
         function ajaxcart2(){
             $.ajax({ url: "{{path('auto_robot', {'valor': '1'})}}", type:'GET' , success: function(response) {
+                if(response==0){
+                    $("#escaner").html("Ha terminado");
+                    hola=0;
+                }
                 if(hola==1 ){
                     ajaxcart();
                 }                
                 $("#hola").html("ajax2");
-                if({{valor}}==0){
-                    $("#escaner").html("Ha terminado");
-                    hola=0;
-                }
             }});
         }
         </script>
@@ -51,5 +51,6 @@
     <body>
         <a id="escaner" href="#">Comenzar</a>
         <div id="hola"></div>
+        <div id="adios"></div>
     </body>
 </html>
