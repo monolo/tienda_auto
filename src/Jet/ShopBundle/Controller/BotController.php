@@ -125,7 +125,7 @@ class BotController extends Controller {
                 preg_match("#\d*\.\w*#is", $nameimage[0], $nameimage2);
                 preg_match("#=[^%]*%#is", $image[0], $auxdateimage);
                 preg_match("#[^=][^%]*#is", $auxdateimage[0], $dateimage);
-                $directorio = "/var/www/comertial.com/web/uploads/documents/" . $nameimage2[0];
+                $directorio = "/Users/manuel/www/tienda_auto/web/uploads/documents/" . $nameimage2[0];
 
                 //item number
                 preg_match("#Item\s*Code\s*\:[^<]*#is", $result, $auxitem_number);
@@ -144,7 +144,7 @@ class BotController extends Controller {
                     $product->setComment("prueba");
                     $product->setCategory($botproduct->getCategory());
                     $product->setSubcategory($botproduct->getSubcategory());
-                    $products->setDisplay(1);
+                    $product->setDisplay(1);
                     $product->setChecked(1);
                     $em->persist($product);
                     $em->flush();
