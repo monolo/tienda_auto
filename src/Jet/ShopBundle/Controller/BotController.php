@@ -125,7 +125,7 @@ class BotController extends Controller {
                 preg_match("#\d*\.\w*#is", $nameimage[0], $nameimage2);
                 preg_match("#=[^%]*%#is", $image[0], $auxdateimage);
                 preg_match("#[^=][^%]*#is", $auxdateimage[0], $dateimage);
-                $directorio = "/Users/manuel/www/tienda_auto/web/uploads/documents/" . $nameimage2[0];
+                $directorio = "/var/www/comertial.com/web/uploads/documents/" . $nameimage2[0];
 
                 //item number
                 preg_match("#Item\s*Code\s*\:[^<]*#is", $result, $auxitem_number);
