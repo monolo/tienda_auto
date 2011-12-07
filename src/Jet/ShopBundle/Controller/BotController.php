@@ -68,13 +68,13 @@ class BotController extends Controller {
                 $valor = 0;
             } else {
                 if ($botproduct->getSaveurl() == "null") {
-                    $productos = $em->getRepository('JetShopBundle:Product')->findBySubcategory($botproduct->getSubcategory()->getId());
+                    /*$productos = $em->getRepository('JetShopBundle:Product')->findBySubcategory($botproduct->getSubcategory()->getId());
                     foreach ($productos as $producto) {
                         if ($producto->getChecked() == 1) {
                             $producto->setDisplay(0);
                             $em->flush();
                         }
-                    }
+                    }*/
                     $result = GET($botproduct->getUrlproduct());
                 } else {
                     $result = GET($botproduct->getSaveurl());
