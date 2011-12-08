@@ -51,7 +51,7 @@ class BotProduct
     /**
      * @var boolean $checked
      *
-     * @ORM\Column(name="checked", type="boolean")
+     * @ORM\Column(name="checked", type="boolean", nullable=true)
      */
     private $checked;
 
@@ -145,5 +145,25 @@ class BotProduct
     public function getCategory()
     {
         return $this->category;
+    }
+
+    /**
+     * Set saveurl
+     *
+     * @param string $saveurl
+     */
+    public function setSaveurl($saveurl)
+    {
+        $this->saveurl = $saveurl;
+    }
+
+    /**
+     * Get saveurl
+     *
+     * @return string 
+     */
+    public function getSaveurl()
+    {
+        return $this->saveurl;
     }
 }

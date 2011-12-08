@@ -51,7 +51,7 @@ class BotProduct
     /**
      * @var boolean $checked
      *
-     * @ORM\Column(name="checked", type="boolean")
+     * @ORM\Column(name="checked", type="boolean", nullable=true)
      */
     private $checked;
 
