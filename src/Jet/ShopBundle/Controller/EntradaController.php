@@ -215,6 +215,7 @@ class EntradaController extends Controller {
      * @Method("GET")
      */
     public function indexAction($category,$subcategory, $product) {
+    	$num_producto=$product;
         $em = $this->getDoctrine()->getEntityManager();
         $slider = array();
         $categories = $em->getRepository('JetShopBundle:Category')->findAll();
@@ -261,7 +262,7 @@ class EntradaController extends Controller {
         		$price=$price+($products[$key]->getPrice()*$auxcart);
         	}
         }
-        return array('category' => $auxcategory, 'categories' => $categories, 'product' => $auxproductos, 'subcategories' => $subcategories, 'slider' => $slider, 'cart' => $carts, 'products' => $products, 'price' => $price, 'subcategory' => $auxsubcategory, 'cantidad' => $cantidad);
+        return array('category' => $auxcategory, 'categories' => $categories, 'product' => $auxproductos, 'subcategories' => $subcategories, 'slider' => $slider, 'cart' => $carts, 'products' => $products, 'price' => $price, 'subcategory' => $auxsubcategory, 'cantidad' => $cantidad, 'num_producto'=>$num_producto);
     }
 
 }
