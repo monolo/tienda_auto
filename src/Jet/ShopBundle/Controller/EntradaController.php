@@ -47,12 +47,13 @@ class EntradaController extends Controller {
    	 
     
     /**
-     * @Route("/ajax/{category}/{subcategory}/{product}", name="entrada_category", defaults={"category" = "home","subcategory" = "home", "product" = "1"})
+     * @Route("/ajax/{category}/{subcategory}", name="entrada_category", defaults={"category" = "home","subcategory" = "home"})
      * @Method("GET")
      * @Template()
      */
-    public function subcategoryAction($category,$subcategory, $product){
+    public function subcategoryAction($category,$subcategory){
     	if($this->container->get('request')->isXmlHttpRequest()){
+    		$product = 1;
     		$em = $this->getDoctrine()->getEntityManager();
     		$category = mb_strtolower($category);
         	$auxcategory=$em->getRepository('JetShopBundle:Category')->findOneByName($category);;
