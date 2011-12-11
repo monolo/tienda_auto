@@ -172,22 +172,22 @@ class ProductController extends Controller
      */
     public function deleteAction($id)
     {
-        $form = $this->createDeleteForm($id);
+        /*$form = $this->createDeleteForm($id);
         $request = $this->getRequest();
 
         $form->bindRequest($request);
 
-        if ($form->isValid()) {
+        if ($form->isValid()) {*/
             $em = $this->getDoctrine()->getEntityManager();
             $entity = $em->getRepository('JetShopBundle:Product')->find($id);
 
-            if (!$entity) {
+            /*if (!$entity) {
                 throw $this->createNotFoundException('Unable to find Product entity.');
-            }
+            }*/
 
             $em->remove($entity);
             $em->flush();
-        }
+        //}
 
         return $this->redirect($this->generateUrl('auto_product'));
     }

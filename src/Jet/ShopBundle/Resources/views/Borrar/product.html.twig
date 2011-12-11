@@ -1,0 +1,34 @@
+<div class="items">
+	<div class="cl">&nbsp;</div>
+    	<ul class="gallery clearfix">
+        <!--producto -->
+{% for auxproduct in product %}
+        	<li>
+            	<div class="image">
+                	<a href="{{asset(auxproduct.getWebPath)}}" rel="prettyPhoto[{{subcategory.getName}}]"><img src="{{asset(auxproduct.getWebPath)}}" height="83" width="126" alt="" /></a>
+                </div>
+                <p>
+                	Nombre Producto: <a href="#">{{auxproduct.getName}}</a><br/>
+                	<!--Num. Referencia: <span>{{auxproduct.getItemNumber}}</span><br />-->
+                	Lista Tallas : 
+                	<span>
+                		<select class="tallas" name="tallas" id="talla_{{auxproduct.getId}}">
+                			<option value="0">Selecciona talla</option>
+	{% for size in auxproduct.getSizeList() %}
+							<option value="{{ size }}">{{ size }}</option>
+    {% endfor %}
+                		</select>
+                	</span>
+                </p>
+                <p class="price">Precio: <strong>{{auxproduct.getPrice}} €</strong>
+                	<strong class="anadir" style="float: right;">
+                    	<a id="{{ auxproduct.getId }}" rel="{{path('auto_product_delete', { 'id': auxproduct.getId })}}"><img height="20px" width="20px" src="{{asset('bundles/jetshop/images/icon-cart.gif')}}" /></a>
+                    </strong>
+                </p>
+            </li>
+{% endfor %}
+        <!-- End producto -->
+    	</ul>
+	<div class="cl">&nbsp;</div>
+</div>
+

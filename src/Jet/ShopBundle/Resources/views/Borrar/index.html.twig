@@ -103,23 +103,11 @@
         //comprar con el carrito
         $(".anadir a").live("click", function(){
         	var carturl=$(this).attr('rel');
-        	var productid=$(this).attr('id');
-        	var talla=$(this).parent().parent().parent().find('.tallas').val();
-        	carturl=carturl+"/add/"+productid+"/"+talla;
-        	if(talla==0 || talla==undefined){
-        		alert("Selecciona una talla");
-        	}
-        	else{
-        		ajaxcart(carturl);
-        	}
+        	var hola=$(this);
+        	$.ajax({ url: carturl, type:'POST' , success: function(response) {
+      			hola.css("display","none");
+    		}});
         });
-        $(".remove").click(function(){
-       		ajaxcart($(this).attr('rel'));
-        });
-        $(".remove").live("click", function(){
-        	ajaxcart($(this).attr('rel'));
-        });
-        
     });
     
 </script>
@@ -141,7 +129,7 @@
 		
 		<!-- Header -->
 		<div id="header">
-                        <a style="float: left;"href="{{path('entrada_index', {'category': 'home'})}}"><img src="{{asset('bundles/jetshop/css/images/logo.jpg')}}" height="72" width="248" alt="" /></a>
+                        <a style="float: left;"href="{{path('borrar_entrada_index', {'category': 'home'})}}"><img src="{{asset('bundles/jetshop/css/images/logo.jpg')}}" height="72" width="248" alt="" /></a>
                         <div id="social">
                             <a href="http://www.tuenti.com/share" class="tuenti-share-button" icon-style="light" share-url="http://www.comertial.com"></a>                            
                             <div class="fb-like" data-href="http://www.facebook.com/pages/comertial/241172119269251" data-send="false" data-layout="button_count" data-show-faces="false" data-font="arial"></div>
@@ -149,7 +137,7 @@
                         </div>
                         <div id="navigation">
 				<ul>
-				    <li><a href="{{path('entrada_index', {'category': 'home'})}}">Home</a></li>
+				    <li><a href="{{path('borrar_entrada_index', {'category': 'home'})}}">Home</a></li>
                                     <li class="last"><a href="#">Contacto</a></li>
 				</ul>
 			</div>
@@ -186,28 +174,14 @@
                         <ul id="category">
                             {% for aux in categories %}
                                 {% if aux.name==category.getName %}
-                                    <li><a rel="" class="active" href="{{ path('entrada_index', { 'category': (aux.name|lower) }) }}">{{aux.name|title}}</a></li>
+                                    <li><a rel="" class="active" href="{{ path('borrar_entrada_index', { 'category': (aux.name|lower) }) }}">{{aux.name|title}}</a></li>
                                 {% else %}
-                                    <li><a href="{{ path('entrada_index', { 'category': (aux.name|lower) }) }}">{{aux.name|title}}</a></li>
+                                    <li><a href="{{ path('borrar_entrada_index', { 'category': (aux.name|lower) }) }}">{{aux.name|title}}</a></li>
                                 {% endif %}    
                             {% endfor %}
                         </ul>
                     </div>
-                    <div class="right">
-                        <span class="cart">
-                            <a class="cart-ico">&nbsp;</a>
-                            <strong id="precio"></strong>
-                        </span>
-                        <span class="left more-links">
-                            <a href="{{path ('entrada_checkout')}}">Comprar</a>
-                            <a id="detalles">Detalles</a>
-                        </span>
-                    </div>
-		</div>
-                <!-- cart -->
-                <div class="carts">
-                    {% include 'JetShopBundle:Cart:cart.html.twig' with {'cart': cart, 'products': products, 'category': category.getName} %}
-                </div>
+                    		</div>
                 <!-- End cart -->
 		
 		<!-- Content -->
@@ -219,9 +193,9 @@
                                     {% for aux in subcategories %}
                                         {% if aux.name == subcategory.getName %}
                                         {% set auxhola=1 %}
-                                            <li><a rel="{{path('entrada_category', {'category': category.getName, 'subcategory': aux.getName})}}" id="der{{ aux.id }}" class="active"><span>{{ aux.name }}</span></a></li>
+                                            <li><a rel="{{path('borrar_entrada_category', {'category': category.getName, 'subcategory': aux.getName})}}" id="der{{ aux.id }}" class="active"><span>{{ aux.name }}</span></a></li>
                                         {% else %}    
-                                            <li><a rel="{{path('entrada_category', {'category': category.getName, 'subcategory': aux.getName})}}" id="der{{ aux.id }}" id="der{{ aux.id }}" ><span>{{ aux.name }}</span></a></li>
+                                            <li><a rel="{{path('borrar_entrada_category', {'category': category.getName, 'subcategory': aux.getName})}}" id="der{{ aux.id }}" id="der{{ aux.id }}" ><span>{{ aux.name }}</span></a></li>
                                         {% endif %}
                                     {% endfor %}
 				</ul>
@@ -239,7 +213,7 @@
                                             {% if aux.name == subcategory.getName %}
                                             {% set auxhola=1 %}
                                             	<div class="tab-content" style="display:block;" id="slider{{ aux.id }}">
-                                            	{% include 'JetShopBundle:Entrada:subcategory.html.twig' with {'product': product, 'subcategory': subcategory, 'cantidad': cantidad, 'category': category} %}
+                                            	{% include 'JetShopBundle:Borrar:subcategory.html.twig' with {'product': product, 'subcategory': subcategory, 'cantidad': cantidad, 'category': category} %}
                                             {% else %}
                                                 <div class="tab-content" id="slider{{ aux.id }}">
                                             {% endif %}
