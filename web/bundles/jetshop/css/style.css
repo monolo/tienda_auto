@@ -42,7 +42,7 @@ h1#logo a{ display:block; height:61px; width: 248px; text-indent: -4000px;}
 #top { height:479px; background:#000; }
 #header { height:61px; }
 
-#slider { width:980px; height:418px; position:relative; overflow:hidden; }
+/*#slider { width:980px; height:418px; position:relative; overflow:hidden; }
 #slider-holder { width:980px; height:418px; position:relative; overflow:hidden; }
 #slider-holder ul{ width:980px; height:418px; position:relative; overflow:hidden; list-style-type: none;}
 #slider-holder .jcarousel-clip{ width:980px; height:418px; position:relative; overflow:hidden; }
@@ -50,7 +50,87 @@ h1#logo a{ display:block; height:61px; width: 248px; text-indent: -4000px;}
 #slider-holder ul li{ width:980px; height:418px; position:relative; overflow:hidden; float:left; display:inline; }
 #slider-nav a{ position:absolute; top:180px; font-size:0; line-height:0; z-index:2; width:58px; height:58px; text-indent: -4000px;}
 #slider-nav a.prev{ background:url(images/prev.gif); left:0;}
-#slider-nav a.next{ background:url(images/next.gif); right:0;}
+#slider-nav a.next{ background:url(images/next.gif); right:0;}*/
+
+#slider {
+	padding-top: 60px;
+    width: 880px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.scroll {
+	overflow: hidden;
+	width: 800px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.scrollContainer {
+	position: relative;
+}
+
+.scrollContainer div.panel {
+    padding: 10px;
+    width: 274px;
+	height: 318px;
+}
+
+#left-shadow {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 12px;
+	bottom: 0;
+	background: url(../images/leftshadow.png) repeat-y;
+}
+
+#right-shadow {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 12px;
+	bottom: 0;
+	background: url(../images/rightshadow.png) repeat-y;
+}
+
+.inside {
+	padding: 10px;
+	/*border: 1px solid #999;*/
+}
+
+.inside img {
+	display: block;
+	border: 1px solid #666;
+	margin: 0 0 10px 0;
+	width: 250px;
+}
+
+.inside h2 {
+	font-weight: normal;
+	color: #111;
+	font-size: 16px;
+	margin: 0 0 8px 0;
+}
+
+.inside p {
+	font-size: 11px;
+	color: #ccc;
+}
+.scrollButtons {
+    position: absolute;
+    top: 127px;
+    cursor: pointer;
+}
+
+.scrollButtons.left {
+    left: -45px;
+}
+
+.scrollButtons.right {
+    right: -45px;
+}
+
 
 
 #main { width:100%; background:url(images/main.gif) repeat-x 0 0;}

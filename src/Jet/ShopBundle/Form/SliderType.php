@@ -11,7 +11,6 @@ class SliderType extends AbstractType
     {
         $builder
             ->add('file')
-            ->add('category')
         ;
     }
 

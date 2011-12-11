@@ -210,7 +210,7 @@ class EntradaController extends Controller {
     }
     
     /**
-     * @Route("/{category}/{subcategory}/{product}", defaults={"category" = "home", "subcategory" = "home","product" = "1"}, requirements={"category" = "[^auto]|[^\/]*"} ,name="entrada_index")
+     * @Route("/{category}/{subcategory}/{product}", defaults={"category" = "home", "subcategory" = "home","product" = "1"}, requirements={"category" = "[^(auto)][^\/]*"} ,name="entrada_index")
      * @Template()
      * @Method("GET")
      */
@@ -247,7 +247,7 @@ class EntradaController extends Controller {
 			}
 			$cantidad=$i;
     	}
-    	$slider = $em->getRepository('JetShopBundle:Slider')->findByCategory($auxcategory->getId());
+    	$slider = $em->getRepository('JetShopBundle:Slider')->findAll();
         
         //cart
         $ema = $em->getRepository('JetShopBundle:Product');

@@ -84,10 +84,6 @@ class Product
      */
     private $subcategory;
     
-    /**
-     * @ORM\OneToMany(targetEntity="Slider", mappedBy="product")
-     */
-    private $product;
     
     /**
      * @ORM\OneToOne(targetEntity="Pedido_producto")
@@ -387,26 +383,6 @@ class Product
     public function getSubcategory()
     {
         return $this->subcategory;
-    }
-
-    /**
-     * Add product
-     *
-     * @param Jet\ShopBundle\Entity\Slider $product
-     */
-    public function addSlider(\Jet\ShopBundle\Entity\Slider $product)
-    {
-        $this->product[] = $product;
-    }
-
-    /**
-     * Get product
-     *
-     * @return Doctrine\Common\Collections\Collection 
-     */
-    public function getProduct()
-    {
-        return $this->product;
     }
 
     /**

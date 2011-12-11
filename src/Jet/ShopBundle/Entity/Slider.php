@@ -25,17 +25,6 @@ class Slider
     private $id;
     
     /**
-     * @ORM\ManyToOne(targetEntity="Product", inversedBy="slider")
-     * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
-     */
-    private $product;
-    /**
-     * @ORM\ManyToOne(targetEntity="Category", inversedBy="slider")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
-     */
-    private $category;
-    
-    /**
      * @Assert\File(maxSize="6000000")
      */
     public $file;
@@ -140,45 +129,5 @@ class Slider
     public function getPath()
     {
         return $this->path;
-    }
-
-    /**
-     * Set product
-     *
-     * @param Jet\ShopBundle\Entity\Product $product
-     */
-    public function setProduct(\Jet\ShopBundle\Entity\Product $product)
-    {
-        $this->product = $product;
-    }
-
-    /**
-     * Get product
-     *
-     * @return Jet\ShopBundle\Entity\Product 
-     */
-    public function getProduct()
-    {
-        return $this->product;
-    }
-
-    /**
-     * Set category
-     *
-     * @param Jet\ShopBundle\Entity\Category $category
-     */
-    public function setCategory(\Jet\ShopBundle\Entity\Category $category)
-    {
-        $this->category = $category;
-    }
-
-    /**
-     * Get category
-     *
-     * @return Jet\ShopBundle\Entity\Category 
-     */
-    public function getCategory()
-    {
-        return $this->category;
     }
 }
