@@ -235,7 +235,6 @@ class EntradaController extends Controller {
         	$auxsubcategory=$em->getRepository('JetShopBundle:Subcategory')->findOneByCategory($auxcategory->getId());
         }
         $subcategories = $em->getRepository('JetShopBundle:Subcategory')->findByCategory($auxcategory->getId());
-        $product = 1;
         
         $category = mb_strtolower($category);
         $productos = $em->getRepository('JetShopBundle:Product')->findBySubcategory($auxsubcategory->getId());

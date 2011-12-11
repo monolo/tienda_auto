@@ -11,7 +11,7 @@
     {% set i=i+1 %}
 {% endfor %}
 </ul>
-{% if ((i-(i%20))/20)>1 %}
+{% if ((i-(i%20))/20)>0 %}
 <ol class="pager">
 	{% if i%20!=0%}
     	{% set i=i+20 %}
