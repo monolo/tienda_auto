@@ -90,6 +90,12 @@ class Product
     private $product;
     
     /**
+     * @ORM\OneToOne(targetEntity="Pedido_producto")
+     * @ORM\JoinColumn(name="pedido_producto_id", referencedColumnName="id")
+     */
+	private $pedido_producto;
+    
+    /**
      * @Assert\File(maxSize="6000000")
      */
     public $file;

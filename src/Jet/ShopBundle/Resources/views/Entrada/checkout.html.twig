@@ -33,6 +33,13 @@
                     </ul>
                 </div>
             </div>
+            <form action="{{ path('auto_product_create') }}" method="post" {{ form_enctype(form_user) }} {% for form in form_producto %}{{ form_enctype(form) }}{% endfor %}>
+    			{{ form_widget(form_user) }}
+    			{% for form in form_producto %}{{ form_enctype(form) }}{% endfor %}
+    			<p>
+        			<button type="submit">Create</button>
+    			</p>
+			</form>
         </div>
     </body>
 </html>

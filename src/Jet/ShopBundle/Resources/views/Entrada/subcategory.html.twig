@@ -1,0 +1,26 @@
+{% set i=0 %}
+<ul>
+{% for auxcantidad in 0..cantidad %}
+	{% if (i%20)==0 %}
+	<li id="slider{{ subcategory.getId }}-{{((i-(i%20))/20)+1}}" class="{% if i==0 %}activo{% else %}noactivo{% endif %}">
+    	{% if i==0 %}
+        	{% include 'JetShopBundle:Entrada:product.html.twig' with {'product': product, 'category': category, 'subcategory': subcategory} %}
+        {% endif %}
+    </li>
+    {% endif %}
+    {% set i=i+1 %}
+{% endfor %}
+</ul>
+{% if ((i-(i%20))/20)>1 %}
+<ol class="pager">
+	{% if i%20!=0%}
+    	{% set i=i+20 %}
+    {% endif %}
+    {% for j in 0..((i/20)-1) %}
+	<li {% if ((((i-(i%20))/20)+1)>20) and j>8 and (j+1)%10!=0 %}style="display: none;"{% endif %}>
+    	<a {% if j==0%}style="background-color:#FFF;"{% endif %} rel="{{ j+1 }}">{{ j+1 }}</a>
+    </li>
+    {% endfor %}
+</ol>
+<div class="contador" style="display: none;">{{i/20}}</div>
+{% endif %}

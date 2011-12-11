@@ -41,7 +41,8 @@ class Pedido
     private $pedido_productos;
     
     /**
-     * @ORM\OneToMany(targetEntity="User", mappedBy="pedido")
+     * @ORM\ManyToOne(targetEntity="User", inversedBy="pedidos")
+     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
     private $user;
     
@@ -50,7 +51,7 @@ class Pedido
      * 
      * @ORM\Column(name="codigo", type="string", length=100)
      */
-    private $codigo; 
+    private $codigo;
 
 
     /**
@@ -166,5 +167,15 @@ class Pedido
     public function getUser()
     {
         return $this->user;
+    }
+
+    /**
+     * Set user
+     *
+     * @param Jet\ShopBundle\Entity\User $user
+     */
+    public function setUser(\Jet\ShopBundle\Entity\User $user)
+    {
+        $this->user = $user;
     }
 }

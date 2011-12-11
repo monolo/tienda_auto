@@ -103,10 +103,12 @@ class BotController extends Controller {
                 for ($i = 0; $i < sizeof($auxsize_list[0]); $i++) {
                     preg_match("#>(\d|\w)*<#is", $auxsize_list[0][$i], $aux2);
                     preg_match("#[^>](\d|\w)*[^<]#is", $aux2[0], $aux);
-                    if ($i == 0) {
-                        $size_list = $aux[0];
-                    } else {
-                        $size_list = $size_list . "/" . $aux[0];
+                    if(isset($aux[0])){
+                    	if ($i == 0) {
+                        	$size_list = $aux[0];
+                    	} else {
+                        	$size_list = $size_list . "/" . $aux[0];
+                    	}
                     }
                 }
 
@@ -114,7 +116,7 @@ class BotController extends Controller {
                 preg_match("#<span\s*id=\"oneprice[^>]*>[^>]*>#is", $result, $auxprice);
                 preg_match("#>[^<]*<#is", $auxprice[0], $aux2price);
                 preg_match("#[^>][^<]*#is", $aux2price[0], $price);
-                $price = number_format(($price[0] * 0.740028121) * 1.2, 2, '.', '');
+                $price = number_format(($price[0] * 0.85) * 1.2, 2, '.', '');
 
                 //image
                 preg_match("#<img\s*alt=\"" . $name[0] . "[^>]*#is", $result, $auximage);

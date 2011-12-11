@@ -34,6 +34,18 @@ class Pedido_producto
      * @ORM\Column(name="quantity", type="integer")
      */
     private $quantity;
+    
+    /**
+     * @ORM\ManyToOne(targetEntity="Pedido", inversedBy="pedido_productos")
+     * @ORM\JoinColumn(name="pedido_id", referencedColumnName="id")
+     */
+    private $pedido;
+    
+    /**
+     * @ORM\OneToOne(targetEntity="Product")
+     * @ORM\JoinColumn(name="product_id", referencedColumnName="id")
+     */
+	private $product;
 
 
     /**
@@ -84,5 +96,45 @@ class Pedido_producto
     public function getQuantity()
     {
         return $this->quantity;
+    }
+
+    /**
+     * Set pedido
+     *
+     * @param Jet\ShopBundle\Entity\Pedido $pedido
+     */
+    public function setPedido(\Jet\ShopBundle\Entity\Pedido $pedido)
+    {
+        $this->pedido = $pedido;
+    }
+
+    /**
+     * Get pedido
+     *
+     * @return Jet\ShopBundle\Entity\Pedido 
+     */
+    public function getPedido()
+    {
+        return $this->pedido;
+    }
+
+    /**
+     * Set product
+     *
+     * @param Jet\ShopBundle\Entity\Product $product
+     */
+    public function setProduct(\Jet\ShopBundle\Entity\Product $product)
+    {
+        $this->product = $product;
+    }
+
+    /**
+     * Get product
+     *
+     * @return Jet\ShopBundle\Entity\Product 
+     */
+    public function getProduct()
+    {
+        return $this->product;
     }
 }

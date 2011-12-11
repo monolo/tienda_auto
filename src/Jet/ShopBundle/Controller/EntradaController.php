@@ -6,6 +6,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Jet\ShopBundle\Form\ProductType;
+
+use Jet\ShopBundle\Entity\Pedido_producto;
+use Jet\ShopBundle\Entity\User;
 
 use Jet\ShopBundle\Model\Cart;
 
@@ -14,60 +18,113 @@ class EntradaController extends Controller {
 	/**
    	 * @Route("/comprar", name="entrada_checkout")
    	 * @Template()
+   	 * @Method("GET")
    	 */
    	 public function checkoutAction() {
    	 	$cart = new Cart($this->container->get('request')->getSession());
         $carts=$cart->getCart();
+        
         if(sizeof($carts)!=0){
-        	$response=array();	
+        	$pedido_producto = array();
+        	$form_producto = array();
+        	$em = $this->getDoctrine()->getEntityManager();
+        	$productos = array();
+        	foreach($carts as $valor => $cart){
+        		$pedido_producto[$valor] = new Pedido_producto();
+        		$form_producto[$valor] = $this->createForm(new Pedido_productoType(), $pedido_producto[$valor]);
+        		$producto[$valor] = $em->getRepository('JetShopBundle:Product')->find($valor);
+        	}
+        	$user = new User();
+        	$form_user = $this->createForm(new UserPedidoType(), $user);
+        	
+        	$response=array('producto' => $producto, 'form_producto' => $form_producto, 'form_user' => $form_user );	
         }
         else{
         	$response=$this->redirect($this->generateUrl("entrada_index"));
         }
         return $response;
    	 }
-
+   	 
+    
     /**
-     * @Route("/{category}",name="entrada_index", defaults={"category" = "home"})
-     * @Template()
+     * @Route("/ajax/{category}/{subcategory}/{product}", name="entrada_category", defaults={"category" = "home","subcategory" = "home", "product" = "1"})
      * @Method("GET")
+     * @Template()
      */
-    public function indexAction($category) {
-        $em = $this->getDoctrine()->getEntityManager();
-        $slider = array();
-        $categories = $em->getRepository('JetShopBundle:Category')->findAll();
-        $subcategories = array();
-        $product = array();
-        $response = array();
-        $category = mb_strtolower($category);
-        
-        $ema = $em->getRepository('JetShopBundle:Product');
-		$cart = new Cart($this->container->get('request')->getSession());
-        $carts=$cart->getCart();
-        $products=array();
-        $price=0;
-        foreach($carts as $key=>$value){
-        	$products[$key]=$ema->find($key);
-        	foreach($value as $auxcart){
-        		$price=$price+($products[$key]->getPrice()*$auxcart);
+    public function subcategoryAction($category,$subcategory, $product){
+    	if($this->container->get('request')->isXmlHttpRequest()){
+    		$em = $this->getDoctrine()->getEntityManager();
+    		$category = mb_strtolower($category);
+        	$auxcategory=$em->getRepository('JetShopBundle:Category')->findOneByName($category);;
+        	if(!isset($auxcategory)){
+        		for($i=0;$i<20;$i++){
+        			$auxcategory = $em->getRepository('JetShopBundle:Category')->find($i);
+        			if(isset($auxcategory)){
+        				break;
+        			}
+        		}
         	}
-        }
-
-        foreach ($categories as $aux) {
-            if (mb_strtolower($aux->getName(), "UTF-8") == $category || $category == 'home') {
-                $category = $aux;
-                $subcategories = $em->getRepository('JetShopBundle:Subcategory')->findByCategory($aux->getId());
-                $product = $em->getRepository('JetShopBundle:Product')->findByCategory($aux->getId());
-                $slider = $em->getRepository('JetShopBundle:Slider')->findByCategory($aux->getId());
-                $response = array('category' => $category, 'categories' => $categories, 'product' => $product, 'subcategories' => $subcategories, 'slider' => $slider, 'cart' => $carts, 'products' => $products, 'price' => $price);
-                break;
-            } else {
-                $response = $this->forward('JetShopBundle:Entrada:error', array('category' => $category));
-            }
-        }
-        return $response;
+        	$subcategory = mb_strtolower($subcategory);
+        	$auxsubcategory=$em->getRepository('JetShopBundle:Subcategory')->findOneByName($subcategory);
+        	if(!isset($auxsubcategory)){
+        		$auxsubcategory=$em->getRepository('JetShopBundle:Subcategory')->findOneByCategory($auxcategory->getId());
+        	}
+    		$productos = $em->getRepository('JetShopBundle:Product')->findBySubcategory($auxsubcategory->getId());
+    		$auxproductos = array();
+    		$num_product=sizeof($productos);
+    		$cantidad=0;
+    		for($i=0;$i<$num_product;$i++){
+				if($i/20>=($product-1) && $i/20<$product ){
+					$auxproductos[$i]=$productos[$i];
+				}
+				$cantidad=$i;
+    		}
+    		return array('product' => $auxproductos, 'subcategory' => $auxsubcategory, 'cantidad' => $cantidad, 'category' => $auxcategory);
+    	}
+    	else{
+    		return $this->redirect($this->generateUrl("entrada_index", array('category' => $category->getName(), 'subcategory' => 'home'), true));
+    	}
     }
-
+    
+    /**
+     * @Route("/ajax/{category}/{subcategory}/{product}", name="entrada_product", defaults={"category" = "home","subcategory" = "home","product" = "1"})
+	 * @Method("GET")
+	 * @Template()
+	 */
+	public function productAction($category,$subcategory,$product){
+		//if($this->container->get('request')->isXmlHttpRequest()){
+    		$em = $this->getDoctrine()->getEntityManager();
+			$category = mb_strtolower($category);
+        	$auxcategory=$em->getRepository('JetShopBundle:Category')->findOneByName($category);;
+        	if(!isset($auxcategory)){
+        		for($i=0;$i<20;$i++){
+        			$auxcategory = $em->getRepository('JetShopBundle:Category')->find($i);
+        			if(isset($auxcategory)){
+        				break;
+        			}
+        		}
+        	}
+        	$subcategory = mb_strtolower($subcategory);
+        	$auxsubcategory=$em->getRepository('JetShopBundle:Subcategory')->findOneByName($subcategory);
+        	if(!isset($auxsubcategory)){
+        		$auxsubcategory=$em->getRepository('JetShopBundle:Subcategory')->findOneByCategory($auxcategory->getId());
+        	}
+    		$productos = $em->getRepository('JetShopBundle:Product')->findBySubcategory($auxsubcategory->getId());
+    		$auxproductos = array();
+    		$num_product=sizeof($productos);
+    		for($i=0;$i<$num_product;$i++){
+				if($i/20>=($product-1) && $i/20<$product ){
+					$auxproductos[$i]=$productos[$i];
+				}
+    		}
+    		return array("product" => $auxproductos, 'category' => $auxcategory, 'subcategory' => $auxsubcategory);
+		/*}
+    	else{
+    		return $this->redirect($this->generateUrl("entrada_index", array('category' => $category->getName(), 'subcategory' => 'home'), true));
+    	}*/
+	}
+	
+	
     /**
      * @Route("/{category}/add/{id}/{size_list}", name="add_cart", defaults={"category" = "home"})
      * @Method("GET")
@@ -105,7 +162,7 @@ class EntradaController extends Controller {
                         'price' => $price
                     ));
         } else {
-            return $this->redirect($this->generateUrl("entrada_index", array('category' => $category), true));
+            return $this->redirect($this->generateUrl("entrada_index", array('category' => $category, 'subcategory' => 'home'), true));
         }
     }
 
@@ -138,7 +195,7 @@ class EntradaController extends Controller {
                         'price' => $price
                     ));
         } else {
-            return $this->redirect($this->generateUrl("entrada_index", array('category' => $category), true));
+            return $this->redirect($this->generateUrl("entrada_index", array('category' => $category, 'subcategory' => 'home'), true));
         }
     }
 
@@ -149,6 +206,62 @@ class EntradaController extends Controller {
      */
     public function errorAction($category) {
         return array('category' => $category);
+    }
+    
+    /**
+     * @Route("/{category}/{subcategory}/{product}", defaults={"category" = "home", "subcategory" = "home","product" = "1"}, requirements={"category" = "[^auto]|[^\/]*"} ,name="entrada_index")
+     * @Template()
+     * @Method("GET")
+     */
+    public function indexAction($category,$subcategory, $product) {
+        $em = $this->getDoctrine()->getEntityManager();
+        $slider = array();
+        $categories = $em->getRepository('JetShopBundle:Category')->findAll();
+        $response = array();
+        $category = mb_strtolower($category);
+        $auxcategory=$em->getRepository('JetShopBundle:Category')->findOneByName($category);;
+        if(!isset($auxcategory)){
+        	for($i=0;$i<20;$i++){
+        		$auxcategory = $em->getRepository('JetShopBundle:Category')->find($i);
+        		if(isset($auxcategory)){
+        			break;
+        		}
+        	}
+        }
+        $subcategory = mb_strtolower($subcategory);
+        $auxsubcategory=$em->getRepository('JetShopBundle:Subcategory')->findOneByName($subcategory);
+        if(!isset($auxsubcategory)){
+        	$auxsubcategory=$em->getRepository('JetShopBundle:Subcategory')->findOneByCategory($auxcategory->getId());
+        }
+        $subcategories = $em->getRepository('JetShopBundle:Subcategory')->findByCategory($auxcategory->getId());
+        $product = 1;
+        
+        $category = mb_strtolower($category);
+        $productos = $em->getRepository('JetShopBundle:Product')->findBySubcategory($auxsubcategory->getId());
+    	$auxproductos = array();
+    	$num_product=sizeof($productos);
+    	$cantidad=0;
+    	for($i=0;$i<$num_product;$i++){
+			if($i/20>=($product-1) && $i/20<$product ){
+				$auxproductos[$i]=$productos[$i];
+			}
+			$cantidad=$i;
+    	}
+    	$slider = $em->getRepository('JetShopBundle:Slider')->findByCategory($auxcategory->getId());
+        
+        //cart
+        $ema = $em->getRepository('JetShopBundle:Product');
+		$cart = new Cart($this->container->get('request')->getSession());
+        $carts=$cart->getCart();
+        $products=array();
+        $price=0;
+        foreach($carts as $key=>$value){
+        	$products[$key]=$ema->find($key);
+        	foreach($value as $auxcart){
+        		$price=$price+($products[$key]->getPrice()*$auxcart);
+        	}
+        }
+        return array('category' => $auxcategory, 'categories' => $categories, 'product' => $auxproductos, 'subcategories' => $subcategories, 'slider' => $slider, 'cart' => $carts, 'products' => $products, 'price' => $price, 'subcategory' => $auxsubcategory, 'cantidad' => $cantidad);
     }
 
 }

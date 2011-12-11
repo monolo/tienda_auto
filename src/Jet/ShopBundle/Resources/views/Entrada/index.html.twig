@@ -41,12 +41,44 @@
 <script>
     $( document ).ready( function(){
         {% for aux in subcategories %}
-                $("#slider{{ aux.id }} ol li a").click(function(){
+                $("#slider{{ aux.id }} ol li a").live("click", function(){
+                	var num=$(this).attr("rel");
+                	var urlnum = $(".tabs .active").attr('rel')+"/"+num;
+                	if($("#slider{{ aux.id }}-"+num).children().html()==null){
+                		$.ajax({ url: urlnum, type:'GET' , success: function(response) {
+      						$("#slider{{ aux.id }}-"+num).html(response);
+    					}});
+                	}
                     $("#slider{{ aux.id }} .pager a").css("background-color", "#FFD700")
                     $(this).css("background-color", "#FFF");
                     $("#slider{{aux.id}} .activo").removeClass("activo").addClass("noactivo");
-                    var num=$(this).attr("rel");
                     $("#slider{{ aux.id }}-"+num).removeClass("noactivo").addClass("activo");
+                    var cantidad=$("#slider{{aux.id}} .contador").html();
+                    if(cantidad>20){
+                    	if(num%10==0 || num==1){
+                    		$("#slider{{aux.id}} ol li").each(function(indice){
+                    			if(((indice+1)>=num && (indice-8)<num) || (indice+1)==1 || (indice+1)%10==0){
+                    				$(this).css("display","block");
+                    			}
+                    			else{
+                    				$(this).css("display","none");
+                    			}
+                    		})
+                    	}
+                    }
+                    
+                });
+                $("#der{{ aux.id }}").click(function(){
+                	var urltab = $(this).attr('rel');
+                	if($("#slider{{ aux.id }}").children().html()==null){
+                		$.ajax({ url: urltab, type:'GET' , success: function(response) {
+      						$("#slider{{ aux.id }}").html(response);
+    					}});
+                	}
+                	$(".tabs ul li a").removeClass("active");
+                	$(this).addClass("active");
+                	$(".tab-content").css("display","none");
+                	$("#slider{{ aux.id }}").css("display", "block");
                 });
         {% endfor %}
         
@@ -153,8 +185,8 @@
                     <div class="left">
                         <ul id="category">
                             {% for aux in categories %}
-                                {% if aux.name==category %}
-                                    <li><a class="active" href="{{ path('entrada_index', { 'category': (aux.name|lower) }) }}">{{aux.name|title}}</a></li>
+                                {% if aux.name==category.getName %}
+                                    <li><a rel="" class="active" href="{{ path('entrada_index', { 'category': (aux.name|lower) }) }}">{{aux.name|title}}</a></li>
                                 {% else %}
                                     <li><a href="{{ path('entrada_index', { 'category': (aux.name|lower) }) }}">{{aux.name|title}}</a></li>
                                 {% endif %}    
@@ -185,10 +217,11 @@
 			<div class="tabs">
 				<ul>
                                     {% for aux in subcategories %}
-                                        {% if loop.first %}
-                                            <li><a href="#" class="active"><span>{{ aux.name }}</span></a></li>
+                                        {% if aux.name == subcategory.getName %}
+                                        {% set auxhola=1 %}
+                                            <li><a rel="{{path('entrada_category', {'category': category.getName, 'subcategory': aux.getName})}}" id="der{{ aux.id }}" class="active"><span>{{ aux.name }}</span></a></li>
                                         {% else %}    
-                                            <li><a href="#"><span>{{ aux.name }}</span></a></li>
+                                            <li><a rel="{{path('entrada_category', {'category': category.getName, 'subcategory': aux.getName})}}" id="der{{ aux.id }}" id="der{{ aux.id }}" ><span>{{ aux.name }}</span></a></li>
                                         {% endif %}
                                     {% endfor %}
 				</ul>
@@ -203,72 +236,12 @@
 					
 					<!-- Tabs Content -->
                                         {% for aux in subcategories %}
-                                            {% if loop.first %}
-                                                <div class="tab-content" style="display:block;" id="slider{{ aux.id }}">
+                                            {% if aux.name == subcategory.getName %}
+                                            {% set auxhola=1 %}
+                                            	<div class="tab-content" style="display:block;" id="slider{{ aux.id }}">
+                                            	{% include 'JetShopBundle:Entrada:subcategory.html.twig' with {'product': product, 'subcategory': subcategory, 'cantidad': cantidad, 'category': category} %}
                                             {% else %}
                                                 <div class="tab-content" id="slider{{ aux.id }}">
-                                            {% endif %}
-                                            {% set i=0 %}
-                                                    <ul>
-                                            {% for auxproduct in product %}
-                                                {% if auxproduct.subcategory == aux.name %}
-                                                    {% if (i%20)==0 %}
-                                                            <li id="slider{{ aux.id }}-{{((i-(i%20))/20)+1}}" class="{% if i==0 %}activo{% else %}noactivo{% endif %}">    
-                                                            <div class="items">
-                                                                <div class="cl">&nbsp;</div>
-                                                                <ul class="gallery clearfix">
-                                                    {% endif%}
-                                                                    <!--producto -->
-                                                                    <li>
-                                                                        <div class="image">
-                                                                            <a href="{{asset(auxproduct.getWebPath)}}" rel="prettyPhoto[{{aux.name}}]"><img src="{{asset(auxproduct.getWebPath)}}" height="83" width="126" alt="" /></a>
-                                                                        </div>
-                                                                        <p>
-                                                                            Nombre Producto: <a href="#">{{auxproduct.getName}}</a><br/>
-                                                                            <!--Num. Referencia: <span>{{auxproduct.getItemNumber}}</span><br />-->
-                                                                            Lista Tallas : <span>
-                                                                            <select class="tallas" name="tallas" id="talla_{{auxproduct.getId}}">
-                                                                            	<option value="0">Selecciona talla</option>
-                                                                            {% for size in auxproduct.getSizeList() %}
-																				<option value="{{ size }}">{{ size }}</option>
-                                                                            {% endfor %}
-                                                                            </select>
-                                                                            </span>
-                                                                        </p>
-                                                                        <p class="price">Precio: <strong>{{auxproduct.getPrice}} €</strong>
-                                                                            <strong class="anadir" style="float: right;">
-                                                                                <a id="{{ auxproduct.getId }}" rel="{{path('entrada_index', { 'category': category.getName })}}"><img height="20px" width="20px" src="{{asset('bundles/jetshop/images/icon-cart.gif')}}" /></a>
-                                                                            </strong>
-                                                                        </p>
-                                                                        	
-                                                                    </li>
-                                                                    <!-- End producto -->
-                                                                      
-                                                    {% if ((i+1)%20)==0 and (i!=0) %}
-                                                                </ul>
-                                                                <div class="cl">&nbsp;</div>
-                                                            </div>
-                                                            </li>
-                                                    {% endif %}
-                                                    
-                                                    {% set i=i+1 %}
-                                                {% endif %}
-                                            {% endfor %}
-                                            {% if  ((i+1)%20)!=0 %}
-                                                                </ul>
-                                                                <div class="cl">&nbsp;</div>
-                                                            </div>
-                                                            </li>
-                                            {% endif %}
-                                                    </ul>
-                                            {% if ((i-(i%20))/20)>1 %}
-                                                    <ol class="pager">
-                                                        {% for j in 0..((i-(i%20))/20) %}
-                                                        <li {% if ((((i-(i%20))/20)+1)>20) and j>8 and (j+1)%10!=0 %}style="display: none;"{% endif %}>
-                                                            <a {% if j==0%}style="background-color:#FFF;"{% endif %} rel="{{ j+1 }}">{{ j+1 }}</a>
-                                                        </li>
-                                                        {% endfor %}
-                                                    </ol>
                                             {% endif %}
                                                 </div>
                                         {% endfor %}

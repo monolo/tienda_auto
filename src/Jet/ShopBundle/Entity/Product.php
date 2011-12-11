@@ -90,6 +90,12 @@ class Product
     private $product;
     
     /**
+     * @ORM\OneToOne(targetEntity="Pedido_producto")
+     * @ORM\JoinColumn(name="pedido_producto_id", referencedColumnName="id")
+     */
+	private $pedido_producto;
+    
+    /**
      * @Assert\File(maxSize="6000000")
      */
     public $file;
@@ -401,5 +407,25 @@ class Product
     public function getProduct()
     {
         return $this->product;
+    }
+
+    /**
+     * Set pedido_producto
+     *
+     * @param Jet\ShopBundle\Entity\Pedido_producto $pedidoProducto
+     */
+    public function setPedidoProducto(\Jet\ShopBundle\Entity\Pedido_producto $pedidoProducto)
+    {
+        $this->pedido_producto = $pedidoProducto;
+    }
+
+    /**
+     * Get pedido_producto
+     *
+     * @return Jet\ShopBundle\Entity\Pedido_producto 
+     */
+    public function getPedidoProducto()
+    {
+        return $this->pedido_producto;
     }
 }
