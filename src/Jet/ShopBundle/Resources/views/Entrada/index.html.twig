@@ -50,7 +50,7 @@
       						$("#slider{{ aux.id }}-"+num).html(response);
     					}});
                 	}
-                	var urlas = urls+"{{aux.getName}}/"+num;
+                	var urlas = urls+"{{aux.getName|lower}}/"+num;
                 	window.history.pushState("hola", "Titulo", urlas);
                     $("#slider{{ aux.id }} .pager a").css("background-color", "#FFD700")
                     $(this).css("background-color", "#FFF");
@@ -78,7 +78,7 @@
       						$("#slider{{ aux.id }}").html(response);
     					}});
                 	}
-                	var urlas = urls+"{{aux.getName}}/"+1;
+                	var urlas = urls+"{{aux.getName|lower}}/"+1;
                 	window.history.pushState("hola", "Titulo", urlas);
                 	$(".tabs ul li a").removeClass("active");
                 	$(this).addClass("active");

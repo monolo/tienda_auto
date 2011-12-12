@@ -39,7 +39,7 @@ class BorrarController extends Controller {
         		}
         	}
         	$subcategory = mb_strtolower($subcategory);
-        	$auxsubcategory=$em->getRepository('JetShopBundle:Subcategory')->findOneByName($subcategory);
+        	$auxsubcategory=$em->getRepository('JetShopBundle:Subcategory')->findOneBy(array('category' => $auxcategory->getId(), 'name' => $subcategory));
         	if(!isset($auxsubcategory)){
         		$auxsubcategory=$em->getRepository('JetShopBundle:Subcategory')->findOneByCategory($auxcategory->getId());
         	}
@@ -53,10 +53,10 @@ class BorrarController extends Controller {
 				}
 				$cantidad=$i;
     		}
-    		return array('product' => $auxproductos, 'subcategory' => $auxsubcategory, 'cantidad' => $cantidad, 'category' => $auxcategory);
+    		return array('product' => $auxproductos, 'subcategory' => $auxsubcategory, 'cantidad' => $cantidad, 'category' => $auxcategory, 'num_producto'=> 1);
     	}
     	else{
-    		return $this->redirect($this->generateUrl("entrada_index", array('category' => $category->getName(), 'subcategory' => 'home'), true));
+    		return $this->redirect($this->generateUrl("entrada_index", array('category' => $auxcategory->getName(), 'subcategory' => 'home'), true));
     	}
     }
     
@@ -66,7 +66,7 @@ class BorrarController extends Controller {
 	 * @Template()
 	 */
 	public function productAction($category,$subcategory,$product){
-		//if($this->container->get('request')->isXmlHttpRequest()){
+		if($this->container->get('request')->isXmlHttpRequest()){
     		$em = $this->getDoctrine()->getEntityManager();
 			$category = mb_strtolower($category);
         	$auxcategory=$em->getRepository('JetShopBundle:Category')->findOneByName($category);;
@@ -79,7 +79,7 @@ class BorrarController extends Controller {
         		}
         	}
         	$subcategory = mb_strtolower($subcategory);
-        	$auxsubcategory=$em->getRepository('JetShopBundle:Subcategory')->findOneByName($subcategory);
+        	$auxsubcategory=$em->getRepository('JetShopBundle:Subcategory')->findOneBy(array('category' => $auxcategory->getId(), 'name' => $subcategory));
         	if(!isset($auxsubcategory)){
         		$auxsubcategory=$em->getRepository('JetShopBundle:Subcategory')->findOneByCategory($auxcategory->getId());
         	}
@@ -92,27 +92,22 @@ class BorrarController extends Controller {
 				}
     		}
     		return array("product" => $auxproductos, 'category' => $auxcategory, 'subcategory' => $auxsubcategory);
-		/*}
+		}
     	else{
     		return $this->redirect($this->generateUrl("entrada_index", array('category' => $category->getName(), 'subcategory' => 'home'), true));
-    	}*/
+    	}
 	}
-	
-	/**
-     * @Route("/error", name="borrar_entrada_error")
-     * @Template()
-     * @Method("GET")
-     */
-    public function errorAction($category) {
-        return array('category' => $category);
-    }
     
     /**
-     * @Route("/{category}/{subcategory}/{product}", defaults={"category" = "home", "subcategory" = "home","product" = "1"}, requirements={"category" = "[^auto]|[^\/]*"} ,name="borrar_entrada_index")
+     * @Route("/{category}/{subcategory}/{product}", defaults={"category" = "home", "subcategory" = "home","product" = "1"} ,name="borrar_entrada_index")
      * @Template()
      * @Method("GET")
      */
-    public function indexAction($category,$subcategory, $product) {
+     public function indexAction($category,$subcategory, $product) {
+    	if($product=="num"){
+    		$product=1;
+    	}
+    	$num_producto=$product;
         $em = $this->getDoctrine()->getEntityManager();
         $slider = array();
         $categories = $em->getRepository('JetShopBundle:Category')->findAll();
@@ -128,12 +123,11 @@ class BorrarController extends Controller {
         	}
         }
         $subcategory = mb_strtolower($subcategory);
-        $auxsubcategory=$em->getRepository('JetShopBundle:Subcategory')->findOneByName($subcategory);
+        $auxsubcategory=$em->getRepository('JetShopBundle:Subcategory')->findOneBy(array('category' => $auxcategory->getId(), 'name' => $subcategory));
         if(!isset($auxsubcategory)){
         	$auxsubcategory=$em->getRepository('JetShopBundle:Subcategory')->findOneByCategory($auxcategory->getId());
         }
         $subcategories = $em->getRepository('JetShopBundle:Subcategory')->findByCategory($auxcategory->getId());
-        $product = 1;
         
         $category = mb_strtolower($category);
         $productos = $em->getRepository('JetShopBundle:Product')->findBySubcategory($auxsubcategory->getId());
@@ -146,7 +140,7 @@ class BorrarController extends Controller {
 			}
 			$cantidad=$i;
     	}
-    	$slider = $em->getRepository('JetShopBundle:Slider')->findByCategory($auxcategory->getId());
+    	$slider = $em->getRepository('JetShopBundle:Slider')->findAll();
         
         //cart
         $ema = $em->getRepository('JetShopBundle:Product');
@@ -160,7 +154,7 @@ class BorrarController extends Controller {
         		$price=$price+($products[$key]->getPrice()*$auxcart);
         	}
         }
-        return array('category' => $auxcategory, 'categories' => $categories, 'product' => $auxproductos, 'subcategories' => $subcategories, 'slider' => $slider, 'cart' => $carts, 'products' => $products, 'price' => $price, 'subcategory' => $auxsubcategory, 'cantidad' => $cantidad);
+        return array('category' => $auxcategory, 'categories' => $categories, 'product' => $auxproductos, 'subcategories' => $subcategories, 'slider' => $slider, 'cart' => $carts, 'products' => $products, 'price' => $price, 'subcategory' => $auxsubcategory, 'cantidad' => $cantidad, 'num_producto'=> $num_producto);
     }
 
 }

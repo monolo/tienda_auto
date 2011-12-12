@@ -95,7 +95,7 @@ class EntradaController extends Controller {
 	 * @Template()
 	 */
 	public function productAction($category,$subcategory,$product){
-		//if($this->container->get('request')->isXmlHttpRequest()){
+		if($this->container->get('request')->isXmlHttpRequest()){
     		$em = $this->getDoctrine()->getEntityManager();
 			$category = mb_strtolower($category);
         	$auxcategory=$em->getRepository('JetShopBundle:Category')->findOneByName($category);;
@@ -121,10 +121,10 @@ class EntradaController extends Controller {
 				}
     		}
     		return array("product" => $auxproductos, 'category' => $auxcategory, 'subcategory' => $auxsubcategory);
-		/*}
+		}
     	else{
     		return $this->redirect($this->generateUrl("entrada_index", array('category' => $category->getName(), 'subcategory' => 'home'), true));
-    	}*/
+    	}
 	}
 	
 	
