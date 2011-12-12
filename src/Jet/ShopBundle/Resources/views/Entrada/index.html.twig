@@ -40,6 +40,7 @@
 </script>
 <script>
     $( document ).ready( function(){
+    	var urls= "{{path('index')}}{{category.getName|lower}}/";
         {% for aux in subcategories %}
                 $("#slider{{ aux.id }} ol li a").live("click", function(){
                 	var num=$(this).attr("rel");
@@ -49,6 +50,8 @@
       						$("#slider{{ aux.id }}-"+num).html(response);
     					}});
                 	}
+                	var urlas = urls+"{{aux.getName}}/"+num;
+                	window.history.pushState("hola", "Titulo", urlas);
                     $("#slider{{ aux.id }} .pager a").css("background-color", "#FFD700")
                     $(this).css("background-color", "#FFF");
                     $("#slider{{aux.id}} .activo").removeClass("activo").addClass("noactivo");
@@ -75,6 +78,8 @@
       						$("#slider{{ aux.id }}").html(response);
     					}});
                 	}
+                	var urlas = urls+"{{aux.getName}}/"+1;
+                	window.history.pushState("hola", "Titulo", urlas);
                 	$(".tabs ul li a").removeClass("active");
                 	$(this).addClass("active");
                 	$(".tab-content").css("display","none");
@@ -252,7 +257,7 @@
                                             {% if aux.name == subcategory.getName %}
                                             {% set auxhola=1 %}
                                             	<div class="tab-content" style="display:block;" id="slider{{ aux.id }}">
-                                            	{% include 'JetShopBundle:Entrada:subcategory.html.twig' with {'product': product, 'subcategory': subcategory, 'cantidad': cantidad, 'category': category} %}
+                                            	{% include 'JetShopBundle:Entrada:subcategory.html.twig' with {'product': product, 'subcategory': subcategory, 'cantidad': cantidad, 'category': category, 'num_producto': num_producto} %}
                                             {% else %}
                                                 <div class="tab-content" id="slider{{ aux.id }}">
                                             {% endif %}

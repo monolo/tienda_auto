@@ -6,7 +6,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Jet\ShopBundle\Form\ProductType;
+use Jet\ShopBundle\Form\PedidoProductoType;
+use Jet\ShopBundle\Form\PedidoUserType;
+use Jet\ShopBundle\Form\UserPedidoType;
 
 use Jet\ShopBundle\Entity\Pedido_producto;
 use Jet\ShopBundle\Entity\User;
@@ -31,7 +33,7 @@ class EntradaController extends Controller {
         	$productos = array();
         	foreach($carts as $valor => $cart){
         		$pedido_producto[$valor] = new Pedido_producto();
-        		$form_producto[$valor] = $this->createForm(new Pedido_productoType(), $pedido_producto[$valor]);
+        		$form_producto[$valor] = $this->createForm(new PedidoProductoType(), $pedido_producto[$valor]);
         		$producto[$valor] = $em->getRepository('JetShopBundle:Product')->find($valor);
         	}
         	$user = new User();
@@ -80,7 +82,7 @@ class EntradaController extends Controller {
 				}
 				$cantidad=$i;
     		}
-    		return array('product' => $auxproductos, 'subcategory' => $auxsubcategory, 'cantidad' => $cantidad, 'category' => $auxcategory);
+    		return array('product' => $auxproductos, 'subcategory' => $auxsubcategory, 'cantidad' => $cantidad, 'category' => $auxcategory, 'num_producto'=> 1);
     	}
     	else{
     		return $this->redirect($this->generateUrl("entrada_index", array('category' => $auxcategory->getName(), 'subcategory' => 'home'), true));
@@ -270,7 +272,7 @@ class EntradaController extends Controller {
     
     
     /**
-     * @Route("/")
+     * @Route("/", name="index")
      * @Method("GET")
      */
     public function holaAction(){

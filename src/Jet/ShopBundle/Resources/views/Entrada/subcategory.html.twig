@@ -2,8 +2,8 @@
 <ul>
 {% for auxcantidad in 0..cantidad %}
 	{% if (i%20)==0 %}
-	<li id="slider{{ subcategory.getId }}-{{((i-(i%20))/20)+1}}" class="{% if i==0 %}activo{% else %}noactivo{% endif %}">
-    	{% if i==0 %}
+	<li id="slider{{ subcategory.getId }}-{{((i-(i%20))/20)+1}}" class="{% if i==((num_producto-1)*20) %}activo{% else %}noactivo{% endif %}">
+    	{% if i==((num_producto-1)*20) %}
         	{% include 'JetShopBundle:Entrada:product.html.twig' with {'product': product, 'category': category, 'subcategory': subcategory} %}
         {% endif %}
     </li>
@@ -16,9 +16,10 @@
 	{% if i%20!=0%}
     	{% set i=i+20 %}
     {% endif %}
+    {% set auxnum_producto = (num_producto-num_producto%10)/10 %}
     {% for j in 0..((i/20)-1) %}
-	<li {% if ((((i-(i%20))/20)+1)>20) and j>8 and (j+1)%10!=0 %}style="display: none;"{% endif %}>
-    	<a {% if j==0%}style="background-color:#FFF;"{% endif %} rel="{{ j+1 }}">{{ j+1 }}</a>
+	<li {% if ((((i-(i%20))/20)+1)>20) and j<auxnum_producto and j>8+auxnum_producto and (j+1)%10!=0 %}style="display: none;"{% endif %}>
+    	<a {% if j==(num_producto-1) %}style="background-color:#FFF;"{% endif %} rel="{{ j+1 }}">{{ j+1 }}</a>
     </li>
     {% endfor %}
 </ol>
