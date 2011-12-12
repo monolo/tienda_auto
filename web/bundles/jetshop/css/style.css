@@ -101,7 +101,7 @@ h1#logo a{ display:block; height:61px; width: 248px; text-indent: -4000px;}
 
 .inside img {
 	display: block;
-	border: 1px solid #666;
+	/*border: 1px solid #666;*/
 	margin: 0 0 10px 0;
 	width: 250px;
 }

@@ -164,12 +164,14 @@
 			<div style="overflow: hidden;" class="scroll">
 	
 				<div class="scrollContainer">
+					{% set auxidslider=1 %}
 					{% for auxslider in slider %}
-	                <div class="panel" id="panel_{{ auxslider.getId }}">
+	                <div class="panel" id="panel_{{ auxidslider }}">
 						<div class="inside">
 							<img src="{{ asset(auxslider.getWebPath) }}" alt="picture" />
 						</div>
 					</div>
+						{% set auxidslider=auxidslider+1 %}
 					{% endfor %}
                 </div>
 
