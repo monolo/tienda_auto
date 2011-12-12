@@ -66,7 +66,7 @@ class EntradaController extends Controller {
         		}
         	}
         	$subcategory = mb_strtolower($subcategory);
-        	$auxsubcategory=$em->getRepository('JetShopBundle:Subcategory')->findOneByName($subcategory);
+        	$auxsubcategory=$em->getRepository('JetShopBundle:Subcategory')->findOneByName(array('category' => $auxcategory->getId(), 'name' => $subcategory));
         	if(!isset($auxsubcategory)){
         		$auxsubcategory=$em->getRepository('JetShopBundle:Subcategory')->findOneByCategory($auxcategory->getId());
         	}
@@ -106,7 +106,7 @@ class EntradaController extends Controller {
         		}
         	}
         	$subcategory = mb_strtolower($subcategory);
-        	$auxsubcategory=$em->getRepository('JetShopBundle:Subcategory')->findOneByName($subcategory);
+        	$auxsubcategory=$em->getRepository('JetShopBundle:Subcategory')->findOneByName(array('category' => $auxcategory->getId(), 'name' => $subcategory));
         	if(!isset($auxsubcategory)){
         		$auxsubcategory=$em->getRepository('JetShopBundle:Subcategory')->findOneByCategory($auxcategory->getId());
         	}
@@ -210,11 +210,14 @@ class EntradaController extends Controller {
     }
     
     /**
-     * @Route("/{category}/{subcategory}/{product}", defaults={"category" = "home", "subcategory" = "home","product" = "1"}, requirements={"category" = "[^(auto)][^\/]*"} ,name="entrada_index")
+     * @Route("/{category}/{subcategory}/{product}", defaults={"category" = "home", "subcategory" = "home","product" = "num"} ,name="entrada_index", requirements={"category" = "[^(auto)][^(\/)]*|otros"})
      * @Template()
      * @Method("GET")
      */
     public function indexAction($category,$subcategory, $product) {
+    	if($product=="num"){
+    		$product=1;
+    	}
     	$num_producto=$product;
         $em = $this->getDoctrine()->getEntityManager();
         $slider = array();
@@ -231,7 +234,7 @@ class EntradaController extends Controller {
         	}
         }
         $subcategory = mb_strtolower($subcategory);
-        $auxsubcategory=$em->getRepository('JetShopBundle:Subcategory')->findOneByName($subcategory);
+        $auxsubcategory=$em->getRepository('JetShopBundle:Subcategory')->findOneBy(array('category' => $auxcategory->getId(), 'name' => $subcategory));
         if(!isset($auxsubcategory)){
         	$auxsubcategory=$em->getRepository('JetShopBundle:Subcategory')->findOneByCategory($auxcategory->getId());
         }
@@ -262,7 +265,16 @@ class EntradaController extends Controller {
         		$price=$price+($products[$key]->getPrice()*$auxcart);
         	}
         }
-        return array('category' => $auxcategory, 'categories' => $categories, 'product' => $auxproductos, 'subcategories' => $subcategories, 'slider' => $slider, 'cart' => $carts, 'products' => $products, 'price' => $price, 'subcategory' => $auxsubcategory, 'cantidad' => $cantidad, 'num_producto'=>$num_producto);
+        return array('category' => $auxcategory, 'categories' => $categories, 'product' => $auxproductos, 'subcategories' => $subcategories, 'slider' => $slider, 'cart' => $carts, 'products' => $products, 'price' => $price, 'subcategory' => $auxsubcategory, 'cantidad' => $cantidad, 'num_producto'=> $num_producto);
+    }
+    
+    
+    /**
+     * @Route("/")
+     * @Method("GET")
+     */
+    public function holaAction(){
+    	return $this->redirect($this->generateUrl("entrada_index", array('category' => "calzado", 'subcategory' => 'nike', 'product' => "1"), true));
     }
 
 }
