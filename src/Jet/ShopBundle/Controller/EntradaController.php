@@ -66,7 +66,7 @@ class EntradaController extends Controller {
         		}
         	}
         	$subcategory = mb_strtolower($subcategory);
-        	$auxsubcategory=$em->getRepository('JetShopBundle:Subcategory')->findOneByName(array('category' => $auxcategory->getId(), 'name' => $subcategory));
+        	$auxsubcategory=$em->getRepository('JetShopBundle:Subcategory')->findOneBy(array('category' => $auxcategory->getId(), 'name' => $subcategory));
         	if(!isset($auxsubcategory)){
         		$auxsubcategory=$em->getRepository('JetShopBundle:Subcategory')->findOneByCategory($auxcategory->getId());
         	}
@@ -83,7 +83,7 @@ class EntradaController extends Controller {
     		return array('product' => $auxproductos, 'subcategory' => $auxsubcategory, 'cantidad' => $cantidad, 'category' => $auxcategory);
     	}
     	else{
-    		return $this->redirect($this->generateUrl("entrada_index", array('category' => $category->getName(), 'subcategory' => 'home'), true));
+    		return $this->redirect($this->generateUrl("entrada_index", array('category' => $auxcategory->getName(), 'subcategory' => 'home'), true));
     	}
     }
     
@@ -106,7 +106,7 @@ class EntradaController extends Controller {
         		}
         	}
         	$subcategory = mb_strtolower($subcategory);
-        	$auxsubcategory=$em->getRepository('JetShopBundle:Subcategory')->findOneByName(array('category' => $auxcategory->getId(), 'name' => $subcategory));
+        	$auxsubcategory=$em->getRepository('JetShopBundle:Subcategory')->findOneBy(array('category' => $auxcategory->getId(), 'name' => $subcategory));
         	if(!isset($auxsubcategory)){
         		$auxsubcategory=$em->getRepository('JetShopBundle:Subcategory')->findOneByCategory($auxcategory->getId());
         	}
