@@ -5,7 +5,7 @@
 {% for auxproduct in product %}
         	<li>
             	<div class="image">
-                	<a href="{{asset(auxproduct.getWebPath)}}" rel="prettyPhoto[{{subcategory.getName}}]"><img src="{{asset(auxproduct.getWebPath)}}" height="83" width="126" alt="" /></a>
+                	<a href="{{asset(auxproduct.getWebPath)}}" rel="prettyPhoto[{{subcategory.getName}}]"><img src="{{asset(auxproduct.getWebPath)}}" height="83" width="{{ (auxproduct.gettamano[0]/auxproduct.gettamano[1])*83 }}" alt="" /></a>
                 </div>
                 <p>
                 	Nombre Producto: <a href="#">{{auxproduct.getName}}</a><br/>

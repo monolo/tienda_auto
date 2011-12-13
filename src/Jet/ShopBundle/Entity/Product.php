@@ -165,6 +165,10 @@ class Product
         return 'uploads/documents';
     }
 
+	public function gettamano()
+	{
+		return getimagesize($this->getAbsolutePath());
+	}
 
     /**
      * Get id

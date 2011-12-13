@@ -6,7 +6,7 @@
         		<span>{{ product.getName }}</span>
         		<span>{{size_list}}</span>
         		<span>{{ product.getPrice }}€</span>
-        		<a class="remove" rel="{{path('remove_cart', {'category' : category, 'id': product.id, 'size_list': size_list})}}"><img src="{{asset('bundles/jetshop/images/icon-x.gif')}}" /></a>
+        		<a class="remove" rel="{{path('remove_cart', {'category' : category, 'id': product.id, 'size_list': size_list})}}"><img src="{{asset('bundles/jetshop/images/icon-x.png')}}" /></a>
         	</li>
         {% endfor %}
     {% else %}
